@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Delivery App</title>
+    <!--<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />-->
+    <link rel="stylesheet" href="~/lib/bulma/css/bulma.min.css" />
+    <link rel="stylesheet" href="~/css/main.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alata&family=Roboto+Condensed&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="wrapper">
+        <header class="header border-bottom">
+            <nav class="navbar container is-fluid" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                    <a class="navbar-item is-size-5" asp-controller="Main" asp-action="Index">
+                        <!--<img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">-->
+                        Delivery App
+                    </a>
+                    <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="Mnavbar">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
+                </div>
+                <div id="Mnavbar" class="navbar-menu">
+                    <div class="navbar-start">
+                        <a class="navbar-item">Home</a>
+                        <a class="navbar-item">Documentation</a>
+                    </div>
+                    <div class="navbar-end">
+                        <div class="navbar-item">
+                            <div class="buttons">
+                                <a class="button is-light">
+                                    Log in
+                                </a>
+                            </div>
+                        </div>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="navbar-item has-dropdown is-hoverable">
+                                <a class="navbar-link">
+                                    <i class="fas fa-user pr-2"></i>@User.Identity.Name
+                                </a>
+                                <div class="navbar-dropdown">
+                                    <a class="navbar-item" asp-controller="Account" asp-action="Logout">
+                                        Logout
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <nav class="nav overflow-auto border-right">
+            <div class="w-100 is-flex is-flex-direction-column">
+                <div class="is-flex is-justify-content-start is-align-items-center py-2 my-1 pl-3 nav-active">
+                    <i class="fas fa-chart-bar"></i>
+                    <span class="pl-4">Dashboard</span>
+                </div>
+                <a asp-controller="Courier" asp-action="Index">
+                    <div class="is-flex is-justify-content-start is-align-items-center py-2 my-1 pl-3">
+                        <i class="fas fa-people-carry"></i>
+                        <span class="pl-4">Couriers</span>
+                    </div>
+                </a>
+                <div class="is-flex is-justify-content-start is-align-items-center py-2 my-1 pl-3">
+                    <i class="fas fa-box-open"></i>
+                    <span class="pl-4">Orders</span>
+                </div>
+                <div class="is-flex is-justify-content-start is-align-items-center py-2 my-1 pl-3">
+                    <i class="fas fa-users"></i>
+                    <span class="pl-4">Users</span>
+                </div>
+                <div class="is-flex is-justify-content-start is-align-items-centerr py-2 my-1 pl-3">
+                    <i class="fas fa-bullhorn"></i>
+                    <span class="pl-4">Promotions</span>
+                </div>
+                <div class="is-flex is-justify-content-start is-align-items-center py-2 my-1 pl-3">
+                    <i class="fas fa-inbox"></i>
+                    <span class="pl-4">Email</span>
+                </div>
+                <div class="is-flex is-justify-content-start is-align-items-center py-2 my-1 pl-3">
+                    <i class="fas fa-clipboard"></i>
+                    <span class="pl-4">Reports</span>
+                </div>
+                <div class="is-flex is-justify-content-start is-align-items-center py-2 my-1 pl-3">
+                    <i class="fas fa-user-lock"></i>
+                    <span class="pl-4">Sub Admin</span>
+                </div>
+                <div class="is-flex is-justify-content-start is-align-items-center py-2 my-1 pl-3">
+                    <i class="fas fa-sliders-h"></i>
+                    <span class="pl-4">Settings</span>
+                </div>
+            </div>
+        </nav>
+
+        <main role="main" class="pb-3 main">
+            <div class="px-4 py-3">
+                @RenderBody()
+            </div>
+        </main>
+
+        <footer class="footer p-2">
+            &copy; 2020 - Delivery App - <a asp-controller="Main" asp-action="Privacy">Privacy</a>
+        </footer>
+
+        <!-- scripts -->
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <!--<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>-->
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @RenderSection("Scripts", required: false)
+        <script>
+            $(document).ready(function () {
+
+                // Check for click events on the navbar burger icon
+                $(".navbar-burger").click(function () {
+
+                    // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                    $(".navbar-burger").toggleClass("is-active");
+                    $(".navbar-menu").toggleClass("is-active");
+
+                });
+            });
+        </script>
+    </div>
+</body>
+</html>

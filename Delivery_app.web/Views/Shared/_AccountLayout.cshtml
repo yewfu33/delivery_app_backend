@@ -1,0 +1,21 @@
+﻿@using Delivery_app
+@using Delivery_app.Models
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
+</head>
+<body style="background-color:lightslategrey">
+    <div class="row d-flex justify-content-center align-items-center min-vh-100 w-100">
+        <div class="card shadow px-3 py-4 rounded-0 col-8 col-md-6 col-lg-5 col-xl-3">
+            @RenderBody()
+        </div>
+    </div>
+</body>
+</html>
