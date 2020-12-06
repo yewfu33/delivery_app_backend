@@ -341,4 +341,3 @@ healthchecksdb
 
 # added gitignore
 Uploads/
-**/Uploads
