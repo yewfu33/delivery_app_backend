@@ -15,6 +15,8 @@ namespace Delivery_app.Models
         [Required]
         public String phone_num { get; set; }
         [Required]
+        public String fcm_token { get; set; }
+        [Required]
         public int user_type { get; set; }
     }
 }

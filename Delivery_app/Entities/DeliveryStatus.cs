@@ -10,6 +10,8 @@ namespace Delivery_app.Entities
     public enum DeliveryStatus : byte
     {
         Assigned,
-        Completed
+        OnDeliver,
+        Completed,
+        Cancelled
     }
 }

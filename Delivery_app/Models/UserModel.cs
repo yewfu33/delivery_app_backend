@@ -11,7 +11,8 @@ namespace Delivery_app.Models
         public string name { get; set; }
         public string phone_num { get; set; }
         public string email { get; set; }
-        public int user_type_id { get; set; }
+        public int user_type { get; set; }
+        public string fcm_token { get; set; }
         public DateTime created_at { get; set; }
         public DateTime updated_at { get; set; }
     }

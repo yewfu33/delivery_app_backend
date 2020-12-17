@@ -22,6 +22,7 @@ namespace Delivery_app.Entities
 
         [Column(TypeName = "VARCHAR(50)")]
         public string email { get; set; }
+        public string fcm_token { get; set; }
         public UserType user_type { get; set; }
         public DateTime created_at { get; set; }
         public DateTime updated_at { get; set; }

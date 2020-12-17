@@ -84,6 +84,8 @@ namespace Delivery_app.Controllers
                 id = courier.courier_id,
                 name = courier.name,
                 phone_num = courier.phone_num,
+                email = courier.email,
+                profile_pic = courier.profile_picture,
                 token = tokenString,
                 onBoard = onBoard
             });
@@ -94,6 +96,11 @@ namespace Delivery_app.Controllers
         public async Task<IActionResult> Register([FromBody] CourierRegisterModel model)
         {
             try {
+                var c = await _context.couriers.FirstOrDefaultAsync(c => c.phone_num == model.phone_num);
+
+                if (c != null)
+                    return BadRequest(new { message = "Phone number already exist" });
+
                 Couriers courier = new Couriers();
                 courier.name = model.name;
                 courier.phone_num = model.phone_num;
@@ -158,7 +165,7 @@ namespace Delivery_app.Controllers
             return Ok();
         }
 
-        public bool Authenticate(Couriers c, string password)
+        private bool Authenticate(Couriers c, string password)
         {
             // check if password is correct
             if (!AccountService.VerifyPasswordHash(password, Convert.FromBase64String(c.password), Convert.FromBase64String(c.password_salt)))
