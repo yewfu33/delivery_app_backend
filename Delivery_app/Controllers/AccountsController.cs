@@ -25,13 +25,11 @@ namespace Delivery_app.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly IAccountService _accountService;
-        private readonly ILogger _iLogger;
         private readonly AppSettings _appSettings;
 
-        public AccountsController(IAccountService accountService, IOptions<AppSettings> appSettings, ILogger iLogger)
+        public AccountsController(IAccountService accountService, IOptions<AppSettings> appSettings)
         {
             _accountService = accountService;
-            _iLogger = iLogger;
             _appSettings = appSettings.Value;
         }
 
@@ -78,6 +76,7 @@ namespace Delivery_app.Controllers
             user.phone_num = model.phone_num;
             user.user_type = (UserType)model.user_type;
             user.password = model.password;
+            user.fcm_token = model.fcm_token;
             user.created_at = DateTime.Now;
             user.updated_at = DateTime.Now;
 
