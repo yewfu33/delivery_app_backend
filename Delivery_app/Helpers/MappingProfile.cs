@@ -12,8 +12,14 @@ namespace Delivery_app.Helpers
     {
         public MappingProfile()
         {
-            CreateMap<Orders, OrderModel>();
-            CreateMap<Users, UserModel>();
+            CreateMap<Orders, OrderModel>()
+                .ForMember(om => om.delivery_status,
+                    o => o.MapFrom(y => (int?)y.delivery_status))
+                .ForMember(om => om.vehicle_type,
+                    o => o.MapFrom(y => (int?)y.vehicle_type));
+            CreateMap<Users, UserModel>()
+                .ForMember(um => um.user_type,
+                    u => u.MapFrom(y => (int?)y.user_type));
             CreateMap<DropPoints, DropPointModel>();
         }
     }

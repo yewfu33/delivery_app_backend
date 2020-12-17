@@ -172,6 +172,9 @@ namespace Delivery_app.Migrations
                     b.Property<string>("contact_num")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<int>("courier_id")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("created_at")
                         .HasColumnType("datetime(6)");
 
@@ -232,6 +235,9 @@ namespace Delivery_app.Migrations
 
                     b.Property<string>("email")
                         .HasColumnType("VARCHAR(50)");
+
+                    b.Property<string>("fcm_token")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("name")
                         .HasColumnType("VARCHAR(50)");

@@ -17,8 +17,8 @@ namespace Delivery_app.Models
         public string contact_num { get; set; }
         public DateTime pick_up_datetime { get; set; }
         public double price { get; set; }
-        public int delivery_status_id { get; set; }
-        public int vehicle_type_id { get; set; }
+        public int delivery_status { get; set; }
+        public int vehicle_type { get; set; }
         public bool notify_sender { get; set; }
         public bool notify_recipient { get; set; }
         public DateTime created_at { get; set; }
