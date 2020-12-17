@@ -9,6 +9,7 @@ using Delivery_app.Services;
 using Microsoft.AspNetCore.Authorization;
 using Delivery_app.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 
 namespace Delivery_app.Controllers
 {
@@ -25,7 +26,6 @@ namespace Delivery_app.Controllers
         }
 
         // GET: api/orders
-        [AllowAnonymous]
         [HttpGet]
         public async Task<IEnumerable<OrderModel>> Getorders()
         {
@@ -33,9 +33,8 @@ namespace Delivery_app.Controllers
         }
 
         // GET: api/orders/5
-        [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<ActionResult<OrderModel>> GetOrders(int id)
+        public async Task<ActionResult<OrderModel>> GetOrder(int id)
         {
             OrderModel orders = await _orders.GetOrder(id);
 
@@ -49,7 +48,7 @@ namespace Delivery_app.Controllers
 
         // GET: api/orders/users/5
         [HttpGet("users/{id}")]
-        public ActionResult<IEnumerable<OrderModel>> GetOrdersByUserId(int id)
+        public ActionResult<IEnumerable<OrderModel>> GetOrderByUserId(int id)
         {
             IEnumerable<OrderModel> orders = _orders.GetOrderByUserId(id);
 
@@ -78,7 +77,7 @@ namespace Delivery_app.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!OrdersExists(id))
+                if (!OrderExists(id))
                 {
                     return NotFound();
                 }
@@ -95,7 +94,7 @@ namespace Delivery_app.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult> PostOrders(Orders order)
+        public async Task<ActionResult> PostOrder(Orders order)
         {
             if (order != null)
             {
@@ -108,9 +107,52 @@ namespace Delivery_app.Controllers
             return CreatedAtAction("GetOrders", new { id = order.order_id });
         }
 
+        [HttpPost("take/{order_id}")]
+        public async Task<ActionResult> TakeOrder(int order_id, [FromQuery] int courier_id)
+        {
+            try
+            {
+                await _orders.takeOrder(order_id, courier_id);
+
+                return Ok();
+            }catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { message = e.Message });
+            }
+        }
+
+        [HttpPost("status/update/{order_id}")]
+        public async Task<ActionResult> UpdateStatus(int order_id, [FromQuery] int status)
+        {
+            try
+            {
+                int s = await _orders.updateStatus(order_id, status);
+
+                return Ok(s);
+            }catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { message = e.Message });
+            }
+        }
+
+        [HttpPost("task/courier/{courier_id}")]
+        public async Task<ActionResult> CheckCourierTask(int courier_id, [FromQuery] int status)
+        {
+            try
+            {
+                var orders = await _orders.fetchCourierTask(courier_id, status);
+
+                return Ok(orders);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { message = e.Message });
+            }
+        }
+
         // DELETE: api/orders/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<OrderModel>> DeleteOrders(int id)
+        public async Task<ActionResult<OrderModel>> DeleteOrder(int id)
         {
             OrderModel order = await _orders.DeleteOrder(id);
 
@@ -122,7 +164,7 @@ namespace Delivery_app.Controllers
             return order;
         }
 
-        private bool OrdersExists(int id)
+        private bool OrderExists(int id)
         {
             return _orders.OrderExist(id);
         }

@@ -13,6 +13,10 @@
     <Compile Remove="Migrations\20201125093853_add-onBoard-courier.Designer.cs" />
     <Compile Remove="Migrations\20201125093934_add-onBoard-courier.cs" />
     <Compile Remove="Migrations\20201125093934_add-onBoard-courier.Designer.cs" />
+    <Compile Remove="Migrations\20201209074717_add-courier_id-field.cs" />
+    <Compile Remove="Migrations\20201209074717_add-courier_id-field.Designer.cs" />
+    <Compile Remove="Migrations\20201209075714_add-c_id-field.cs" />
+    <Compile Remove="Migrations\20201209075714_add-c_id-field.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
