@@ -342,3 +342,4 @@ healthchecksdb
 # added gitignore
 Uploads/
 Migrations/
+Delivery_app/Migrations/AppDbContextModelSnapshot.cs
