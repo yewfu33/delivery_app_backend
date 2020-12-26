@@ -27,7 +27,7 @@ namespace Delivery_app.Controllers
         {
             try
             {
-                await _notificationService.sendNotification(notificationModel.fcmToken, notificationModel.collapseKey,
+                await _notificationService.SendNotification(notificationModel.fcmToken, notificationModel.collapseKey,
                     notificationModel.title, notificationModel.body);
 
                 return Ok();

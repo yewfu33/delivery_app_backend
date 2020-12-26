@@ -12,7 +12,7 @@ namespace Delivery_app.Services
 {
     public interface INotificationService
     {
-        Task sendNotification(string fcmToken, string collapseKey, string title, string body);
+        Task SendNotification(string fcmToken, string collapseKey, string title, string body);
     }
 
     public class NotificationService : INotificationService
@@ -24,9 +24,10 @@ namespace Delivery_app.Services
             string fcmServerKey = configuration.GetValue<String>("fcmServerKey");
             //set authorization header
             var added = client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"key={fcmServerKey}");
+            Console.WriteLine("Added :{0} ", added.ToString());
         }
 
-        public async Task sendNotification(string fcmToken, string collapseKey, string title, string body)
+        public async Task SendNotification(string fcmToken, string collapseKey, string title, string body)
         {
             try
             {

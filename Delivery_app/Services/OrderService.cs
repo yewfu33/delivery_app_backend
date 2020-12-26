@@ -13,13 +13,14 @@ namespace Delivery_app.Services
     {
         Task<IEnumerable<OrderModel>> GetAllOrders();
         Task<OrderModel> GetOrder(int id);
-        IEnumerable<OrderModel> GetOrderByUserId(int id);
+        Task<IEnumerable<OrderModel>> GetActiveOrders(int id);
+        Task<IEnumerable<OrderModel>> GetCompletedOrders(int id);
         Task AddOrder(Orders order);
         Task EditOrder(int id, Orders order);
-        Task takeOrder(int id, int courier_id);
+        Task TakeOrder(int id, int courier_id);
         Task<int> updateStatus(int id, int status);
         Task<OrderModel> DeleteOrder(int id);
-        Task<List<OrderModel>> fetchCourierTask(int courier_id, int status);
+        Task<List<OrderModel>> FetchCourierTask(int courier_id, int status);
         bool OrderExist(int id);
     }
 
@@ -38,8 +39,15 @@ namespace Delivery_app.Services
 
         public async Task AddOrder(Orders order)
         {
-            _context.orders.Add(order);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.orders.Add(order);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         public async Task<OrderModel> DeleteOrder(int id)
@@ -64,21 +72,28 @@ namespace Delivery_app.Services
             {
                 await _context.SaveChangesAsync();
             }
-            catch
+            catch (Exception e)
             {
-                throw;
+                throw e;
             }
         }
 
         public async Task<IEnumerable<OrderModel>> GetAllOrders()
         {
-            List<Orders> orders = await _context.orders
+            try
+            {
+                List<Orders> orders = await _context.orders
                 .Where(o => o.courier_id == 0)
-                .Include(o=>o.drop_points)
-                .Include(o=>o.user)
+                .Include(o => o.drop_points)
+                .Include(o => o.user)
                 .ToListAsync();
 
-            return _mapper.Map<List<Orders>, List<OrderModel>>(orders);
+                return _mapper.Map<List<Orders>, List<OrderModel>>(orders);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         public async Task<OrderModel> GetOrder(int id)
@@ -102,17 +117,60 @@ namespace Delivery_app.Services
             return _mapper.Map<OrderModel>(order);
         }
 
-        public IEnumerable<OrderModel> GetOrderByUserId(int id)
+        public async Task<IEnumerable<OrderModel>> GetActiveOrders(int id)
         {
-            List<Orders> order = _context.orders.Include(o => o.drop_points)
-                            .Where(o=>o.user_id == id).ToList();
-
-            if (order == null)
+            try
             {
-                return null;
-            }
+                List<Orders> orders = await _context.orders
+                            .Where(o => o.user_id == id)
+                            .Where(o => ((int)o.delivery_status == 0) || ((int)o.delivery_status == 1))
+                            .Include(o => o.drop_points)
+                            .ToListAsync();
 
-            return _mapper.Map<List<Orders>, List<OrderModel>>(order);
+                if (orders == null)
+                {
+                    return null;
+                }
+
+                return _mapper.Map<List<Orders>, List<OrderModel>>(orders);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public async Task<IEnumerable<OrderModel>> GetCompletedOrders(int id)
+        {
+            try
+            {
+                List<Orders> orders = await _context.orders
+                            .Where(o => o.user_id == id)
+                            .Where(o => ((int)o.delivery_status == 2) || ((int)o.delivery_status == 3))
+                            .Include(o => o.drop_points)
+                            .ToListAsync();
+
+                if (orders == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    var ordersModel = _mapper.Map<List<Orders>, List<OrderModel>>(orders);
+
+                    foreach (var orderModel in ordersModel)
+                    {
+                        var courier = await _context.couriers.FindAsync(orderModel.courier_id);
+                        orderModel.courier = _mapper.Map<Couriers, CourierModel>(courier);
+                    }
+
+                    return ordersModel;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         public bool OrderExist(int id)
@@ -120,7 +178,7 @@ namespace Delivery_app.Services
             return _context.orders.Any(e => e.order_id == id);
         }
 
-        public async Task takeOrder(int id, int courier_id)
+        public async Task TakeOrder(int id, int courier_id)
         {
             try
             {
@@ -137,10 +195,10 @@ namespace Delivery_app.Services
                 _context.orders.Update(order);
                 await _context.SaveChangesAsync();
 
-                var user = _context.users.Find(order.user_id);
+                var user = await _context.users.FindAsync(order.user_id);
 
                 // send notification
-                await _notificationService.sendNotification(
+                await _notificationService.SendNotification(
                         user.fcm_token,
                         "Your Delivery Order has been assigned",
                         "Your Delivery Order has been assigned",
@@ -175,7 +233,7 @@ namespace Delivery_app.Services
             }
         }
 
-        public async Task<List<OrderModel>> fetchCourierTask(int courier_id, int status)
+        public async Task<List<OrderModel>> FetchCourierTask(int courier_id, int status)
         {
             try
             {
