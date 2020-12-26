@@ -340,6 +340,10 @@ ASALocalRun/
 healthchecksdb
 
 # added gitignore
-Uploads/
-Migrations/
+**/Uploads/
+**/Migrations
 Delivery_app/Migrations/AppDbContextModelSnapshot.cs
+**/wwwroot/lib
+**/wwwroot/img
+Delivery_app/appsettings.Development.json
+Delivery_app.web/appsettings.Development.json
