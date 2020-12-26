@@ -1,106 +1,140 @@
 ﻿:root {
-    --myColor: #D50000;
+    --myColor: #fa485d;
 }
 body {
     font-family: 'Open Sans', sans-serif !important;
+    margin: 0;
+    display: block;
+    background-color: #ebeef4;
+}
+*, ::after, ::before {
+    box-sizing: border-box;
+    position: relative;
+}
+.app{
+    padding-top: 4em;
 }
 .wrapper {
     display: grid;
-    grid-template-areas: "header header header" "nav content content" "nav footer footer";
-    grid-template-columns: 200px 1fr;
-    grid-template-rows: 3.6em 1fr auto;
-    height: 100vh;
+    grid-template-areas: "header header header" "nav content content";
+    grid-template-columns: 165px 1fr;
+    grid-template-rows: auto 1fr;
+    min-height: 100vh;
 }
 .header {
     grid-area: header;
+    position: fixed;
+    width: 100%;
+    z-index: 2000;
+}
+.header > * {
+    z-index: inherit;
 }
 .nav {
     grid-area: nav;
-}
-.bg-myColor {
-    background-color: RGB(213, 0, 0);
+    position: fixed;
+    top: 60px;
+    left: 0;
+    bottom: 0;
+    width: 200px;
+    border-right: 1px solid #dae0ec;
+    z-index: 1000;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
 }
 .main {
     grid-area: content;
+    margin-top: 4em;
+    z-index: 10;
+    padding: 10px 14px 10px 50px;
+    position: relative;
 }
-.footer {
-    grid-area: footer;
+.nav-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+    font-size: 1.2rem;
+    position: relative;
+    display: flex;
+}
+.nav-text {
+    margin-left: 0.225rem;
+    flex: 1;
+}
+.online {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    right: 2px;
+    bottom: 2px;
+    background: #1abd36;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
 }
 @media (max-width: 768px) {
     .wrapper {
-        grid-template-areas: "header" "nav" "content" "footer";
+        grid-template-areas: "header" "nav" "content";
         grid-template-columns: 1fr;
         grid-template-rows: 3.6em /* Header */
         minmax(75px, auto) /* Nav */
         1fr /* Content */
-        auto; /* Footer */
     }
 }
-.nav-active{
-    background-color: lightblue;
+
+/* custom class */
+.myBgColor {
+    background-color: #fa485d;
 }
-.border-top {
-    border-top: 1px solid #dee2e6;
+.myFontColor {
+    color: #fa485d;
 }
-.border-left {
-    border-left: 1px solid #dee2e6;
+.promo-code-width {
+    width: 380px;
 }
-.border-right {
-    border-right: 1px solid #dee2e6;
+.my-shadow {
+    box-shadow: 0 6px 6px rgba(31,107,255,.1);
 }
-.border-bottom {
-    border-bottom: 1px solid #dee2e6;
+.active {
+    color: #fa485d;
 }
-/*switch*/
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
-}
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-.slider {
-    position: absolute;
-    cursor: pointer;
+
+/* spinner */
+#overlay {
+    background: #ffffff;
+    color: #666666;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 5000;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
+    float: left;
+    text-align: center;
+    padding-top: 25%;
+    opacity: .80;
 }
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
-}
-input:checked + .slider {
-    background-color: #2196F3;
-}
-input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
-}
-input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
-}
-/* Rounded sliders */
-.slider.round {
-    border-radius: 34px;
-}
-.slider.round:before {
+.spinner {
+    margin: 0 auto;
+    height: 64px;
+    width: 64px;
+    animation: rotate 0.8s infinite linear;
+    border: 5px solid #fa485d;
+    border-right-color: transparent;
     border-radius: 50%;
 }
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 

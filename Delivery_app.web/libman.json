@@ -9,6 +9,10 @@
     {
       "library": "bulma@0.9.1",
       "destination": "wwwroot/lib/bulma/"
+    },
+    {
+      "library": "ckeditor5@24.0.0",
+      "destination": "wwwroot/lib/ckeditor5/"
     }
   ]
 }

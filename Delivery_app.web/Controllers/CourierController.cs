@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Delivery_app.web.Settings;
 using Microsoft.Extensions.Options;
 using Delivery_app.web.Services;
+using NToastNotify;
+using Delivery_app.web.Models;
 
 namespace Delivery_app.web.Controllers
 {
@@ -15,51 +17,109 @@ namespace Delivery_app.web.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IEmailService _emailService;
+        private readonly IToastNotification _toastNotification;
         private readonly MailSettings _mailSettings;
         private Random random = new Random();
 
         public CourierController(AppDbContext context, 
             IOptions<MailSettings> mailSettings, 
-            IEmailService emailService)
+            IEmailService emailService,
+            IToastNotification toastNotification)
         {
             _context = context;
             _emailService = emailService;
+            _toastNotification = toastNotification;
             _mailSettings = mailSettings.Value;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery] string status, string searchQuery)
         {
-            var CouriersList = await _context.couriers.Select(c => 
-                new Couriers{
-                    courier_id = c.courier_id,
-                    profile_picture = c.profile_picture,
-                    name = c.name,
-                    email = c.email,
-                    phone_num = c.phone_num,
-                    vehicle_plate_no = c.vehicle_plate_no,
-                    vehicle_type = c.vehicle_type,
-                    documents = c.documents,
-                    created_at = c.created_at,
-                    updated_at = c.updated_at
-                }
-            ).ToListAsync();
+            List<CourierViewModel> CouriersList;
+
+            if (status == "pending")
+            {
+                CouriersList = await _context.couriers
+                .Where(c => c.otp == null)
+                .Select(c =>
+                    new CourierViewModel
+                    {
+                        courier_id = c.courier_id,
+                        profile_picture = c.profile_picture,
+                        name = c.name,
+                        email = c.email,
+                        phone_num = c.phone_num,
+                        vehicle_plate_no = c.vehicle_plate_no,
+                        vehicle_type = c.vehicle_type,
+                        documents = c.documents,
+                        created_at = c.created_at,
+                        updated_at = c.updated_at,
+                        isRegistered = false
+                    }
+                ).ToListAsync();
+            }
+            else
+            {
+                CouriersList = await _context.couriers
+                .Where(c => c.otp != null)
+                .Select(c =>
+                    new CourierViewModel
+                    {
+                        courier_id = c.courier_id,
+                        profile_picture = c.profile_picture,
+                        name = c.name,
+                        email = c.email,
+                        phone_num = c.phone_num,
+                        vehicle_plate_no = c.vehicle_plate_no,
+                        vehicle_type = c.vehicle_type,
+                        documents = c.documents,
+                        created_at = c.created_at,
+                        updated_at = c.updated_at,
+                        isRegistered = true
+                    }
+                ).ToListAsync();
+            }
+
+            if (!String.IsNullOrEmpty(searchQuery))
+            {
+                CouriersList = CouriersList.Where(c =>
+                    c.name.Contains(searchQuery)
+                    || c.phone_num.Contains(searchQuery)
+                    || c.email.Contains(searchQuery)
+                    || c.vehicle_plate_no.Contains(searchQuery)
+                    ).ToList();
+            }
 
             return View(CouriersList);
         }
 
-        public async Task<IActionResult> Accept(int cid)
+        public async Task<IActionResult> AcceptRegistration(int cid)
         {
             try
             {
                 var courier = await _context.couriers.FindAsync(cid);
 
-                if (courier == null) return View("Index");
+                if (courier == null)
+                {
+                    _toastNotification.AddErrorToastMessage("Courier no found.");
+                    return RedirectToAction("Index");
+                }
+
+                if (courier.otp != null)
+                {
+                    _toastNotification.AddErrorToastMessage("Courier registration already accepted.");
+                    return RedirectToAction("Index");
+                }
 
                 var otp = this.RandomString(6);
 
+                var toEmail = new List<String>
+                {
+                    courier.email
+                };
+
                 await _emailService.SendEmailAsync(
                     "Dear Applicant",
-                    courier.email,
+                    toEmail,
                     "Your Couriers Registration have been Approved",
                     "Your couriers registration on Delivery App have been approved.<br/>" +
                     "kindly login into with the following otp (one time password),<br/>" +
@@ -72,11 +132,14 @@ namespace Delivery_app.web.Controllers
 
                 await _context.SaveChangesAsync();
 
+                _toastNotification.AddInfoToastMessage("Courier registration approved.");
+
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                return View("Index");
+                _toastNotification.AddErrorToastMessage($"Server error occured: ${ex.Message}");
+                return RedirectToAction("Index");
             }
 
         }

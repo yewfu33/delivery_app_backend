@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Delivery App</title>
     <!--<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />-->
-    <link rel="stylesheet" href="~/lib/bulma/css/bulma.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/main.css" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -14,121 +14,142 @@
 </head>
 <body>
     <div class="wrapper">
-        <header class="header border-bottom">
-            <nav class="navbar container is-fluid" role="navigation" aria-label="main navigation">
-                <div class="navbar-brand">
-                    <a class="navbar-item is-size-5" asp-controller="Main" asp-action="Index">
-                        <!--<img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">-->
-                        Delivery App
+        <header class="header">
+            <nav class="navbar navbar-expand navbar-toggleable-sm navbar-dark my-shadow px-4" style="background-color: #D50000;">
+                <div class="container-fluid">
+                    <a class="navbar-brand" asp-controller="Main" asp-action="Index">
+                        <img width="116" height="35" src="~/img/cover2-crop.png">
                     </a>
-                    <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="Mnavbar">
-                        <span aria-hidden="true"></span>
-                        <span aria-hidden="true"></span>
-                        <span aria-hidden="true"></span>
-                    </a>
-                </div>
-                <div id="Mnavbar" class="navbar-menu">
-                    <div class="navbar-start">
-                        <a class="navbar-item">Home</a>
-                        <a class="navbar-item">Documentation</a>
-                    </div>
-                    <div class="navbar-end">
-                        <div class="navbar-item">
-                            <div class="buttons">
-                                <a class="button is-light">
-                                    Log in
-                                </a>
-                            </div>
-                        </div>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="navbar-collapse collapse">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <div class="navbar-item has-dropdown is-hoverable">
-                                <a class="navbar-link">
-                                    <i class="fas fa-user pr-2"></i>@User.Identity.Name
-                                </a>
-                                <div class="navbar-dropdown">
-                                    <a class="navbar-item" asp-controller="Account" asp-action="Logout">
-                                        Logout
-                                    </a>
-                                </div>
-                            </div>
+                            <ul class="navbar-nav ml-auto pr-2"> 
+                                <li class="nav-item">
+                                    <span class="nav-link text-light d-flex align-items-center">
+                                        <img class="rounded-circle img-fluid mr-2" width="28" src="https://stregasystem.com/img/users/user.png" alt="profile" />
+                                        <span>@User.Identity.Name</span>
+                                    </span>
+                                </li>
+                            </ul>
+                            <form class="form-inline text-white">
+                                <a asp-controller="Account" asp-action="Logout" class="btn btn-light rounded-0 btn-sm my-2 my-sm-0" type="submit">Logout</a>
+                            </form>
                         }
                     </div>
                 </div>
             </nav>
         </header>
 
-        <nav class="nav overflow-auto border-right">
-            <div class="w-100 is-flex is-flex-direction-column">
-                <div class="is-flex is-justify-content-start is-align-items-center py-2 my-1 pl-3 nav-active">
-                    <i class="fas fa-chart-bar"></i>
-                    <span class="pl-4">Dashboard</span>
-                </div>
-                <a asp-controller="Courier" asp-action="Index">
-                    <div class="is-flex is-justify-content-start is-align-items-center py-2 my-1 pl-3">
-                        <i class="fas fa-people-carry"></i>
-                        <span class="pl-4">Couriers</span>
+        <nav class="nav">
+            <div style="position: relative;overflow: hidden;width: auto;height: 100%;">
+                <div class="w-100 d-flex flex-column pt-4 h-100">
+                    <div class="px-4">
+                        <a asp-controller="Main" asp-action="Index" class="d-flex px-1 py-2 text-decoration-none text-dark" id="DashboardLink">
+                            <span class="nav-icon">
+                                <i class="fas fa-chart-bar"></i>
+                            </span>
+                            <span class="nav-text">Dashboard</span>
+                        </a>
                     </div>
-                </a>
-                <div class="is-flex is-justify-content-start is-align-items-center py-2 my-1 pl-3">
-                    <i class="fas fa-box-open"></i>
-                    <span class="pl-4">Orders</span>
-                </div>
-                <div class="is-flex is-justify-content-start is-align-items-center py-2 my-1 pl-3">
-                    <i class="fas fa-users"></i>
-                    <span class="pl-4">Users</span>
-                </div>
-                <div class="is-flex is-justify-content-start is-align-items-centerr py-2 my-1 pl-3">
-                    <i class="fas fa-bullhorn"></i>
-                    <span class="pl-4">Promotions</span>
-                </div>
-                <div class="is-flex is-justify-content-start is-align-items-center py-2 my-1 pl-3">
-                    <i class="fas fa-inbox"></i>
-                    <span class="pl-4">Email</span>
-                </div>
-                <div class="is-flex is-justify-content-start is-align-items-center py-2 my-1 pl-3">
-                    <i class="fas fa-clipboard"></i>
-                    <span class="pl-4">Reports</span>
-                </div>
-                <div class="is-flex is-justify-content-start is-align-items-center py-2 my-1 pl-3">
-                    <i class="fas fa-user-lock"></i>
-                    <span class="pl-4">Sub Admin</span>
-                </div>
-                <div class="is-flex is-justify-content-start is-align-items-center py-2 my-1 pl-3">
-                    <i class="fas fa-sliders-h"></i>
-                    <span class="pl-4">Settings</span>
+                    <div class="px-4">
+                        <a asp-controller="Courier" asp-action="Index" class="d-flex px-1 py-2 text-decoration-none text-dark" id="CouriersLink">
+                            <span class="nav-icon">
+                                <i class="fas fa-people-carry"></i>
+                            </span>
+                            <span class="nav-text">Couriers</span>
+                        </a>
+                    </div>
+                    <div class="px-4">
+                        <a asp-controller="Order" asp-action="Index" class="d-flex px-1 py-2 text-decoration-none text-dark" id="OrdersLink">
+                            <span class="nav-icon">
+                                <i class="fas fa-box-open"></i>
+                            </span>
+                            <span class="nav-text">Orders</span>
+                        </a>
+                    </div>
+                    <div class="px-4">
+                        <a asp-controller="User" asp-action="Index" class="d-flex px-1 py-2 text-decoration-none text-dark" id="UsersLink">
+                            <span class="nav-icon">
+                                <i class="fas fa-users"></i>
+                            </span>
+                            <span class="nav-text">Users</span>
+                        </a>
+                    </div>
+                    <div class="px-4">
+                        <a asp-controller="Promotion" asp-action="Index" class="d-flex px-1 py-2 text-decoration-none text-dark" id="PromotionsLink">
+                            <span class="nav-icon">
+                                <i class="fas fa-bullhorn"></i>
+                            </span>
+                            <span class="nav-text">Promotions</span>
+                        </a>
+                    </div>
+                    <div class="px-4">
+                        <a asp-controller="Email" asp-action="Index" class="d-flex px-1 py-2 text-decoration-none text-dark" id="EmailsLink">
+                            <span class="nav-icon">
+                                <i class="far fa-paper-plane"></i>
+                            </span>
+                            <span class="nav-text">Emails</span>
+                        </a>
+                    </div>
+                    <div class="px-4">
+                        <a asp-controller="PushNotification" asp-action="Index" class="d-flex px-1 py-2 text-decoration-none text-dark" id="NotificationsLink">
+                            <span class="nav-icon">
+                                <i class="far fa-bell"></i>
+                            </span>
+                            <span class="nav-text">Notifications</span>
+                        </a>
+                    </div>
+                    <div class="px-4">
+                        <a asp-controller="Order" asp-action="Index" class="d-flex px-1 py-2 text-decoration-none text-dark" id="ReportsLink">
+                            <span class="nav-icon">
+                                <i class="far fa-file-alt"></i>
+                            </span>
+                            <span class="nav-text">Reports</span>
+                        </a>
+                    </div>
+                    <div class="px-4">
+                        <a asp-controller="Order" asp-action="Index" class="d-flex px-1 py-2 text-decoration-none text-dark" id="SettingsLink">
+                            <span class="nav-icon">
+                                <i class="fas fa-sliders-h"></i>
+                            </span>
+                            <span class="nav-text">Settings</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </nav>
 
         <main role="main" class="pb-3 main">
-            <div class="px-4 py-3">
+            <div class="px-4 py-3 card rounded-0">
                 @RenderBody()
             </div>
         </main>
 
-        <footer class="footer p-2">
-            &copy; 2020 - Delivery App - <a asp-controller="Main" asp-action="Privacy">Privacy</a>
-        </footer>
+        <!-- loading overlay -->
+        <div id="overlay" style="display: none;">
+            <div class="spinner"></div>
+            <br />
+            <span class="lead">Loading...</span>
+        </div>
 
-        <!-- scripts -->
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <!--<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>-->
-        <script src="~/js/site.js" asp-append-version="true"></script>
-        @RenderSection("Scripts", required: false)
-        <script>
-            $(document).ready(function () {
-
-                // Check for click events on the navbar burger icon
-                $(".navbar-burger").click(function () {
-
-                    // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-                    $(".navbar-burger").toggleClass("is-active");
-                    $(".navbar-menu").toggleClass("is-active");
-
-                });
-            });
-        </script>
     </div>
+    <!-- scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        document.addEventListener("submit", function (e) {
+            $('#overlay').hide().fadeIn();
+        });
+    </script>
+    <!-- add ntoast -->
+    @await Component.InvokeAsync("NToastNotify")
+    @RenderSection("Scripts", required: false)
 </body>
+
 </html>

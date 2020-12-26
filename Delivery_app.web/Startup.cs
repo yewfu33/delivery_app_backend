@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Delivery_app.Entities;
+using Delivery_app.Services;
 using Delivery_app.web.Services;
 using Delivery_app.web.Settings;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -15,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NToastNotify;
 
 namespace Delivery_app.web
 {
@@ -30,7 +33,22 @@ namespace Delivery_app.web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            // configure automapper
+            services.AddAutoMapper(typeof(Startup));
+
+            // add ntoast
+            services.AddControllersWithViews()
+                .AddNToastNotifyNoty(new NotyOptions
+                {
+                    ProgressBar = false,
+                    Timeout = 2000,
+                    Theme = "metroui"
+                })
+                .AddMvcOptions(options =>
+                {
+                    options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(
+                        _ => "The field is required.");
+                });
 
             //register dbcontext
             services.AddDbContextPool<AppDbContext>(o =>
@@ -52,6 +70,7 @@ namespace Delivery_app.web
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
 
             services.AddTransient<IEmailService, EmailService>();
+            services.AddSingleton<INotificationService, NotificationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,6 +81,9 @@ namespace Delivery_app.web
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
             }
+
+            // add ntoast
+            app.UseNToastNotify();
 
             app.UseStaticFiles();
 

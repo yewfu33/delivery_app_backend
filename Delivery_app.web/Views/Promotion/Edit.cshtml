@@ -1,0 +1,98 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Edit promo code";
+}
+@model PromoCodeModel
+
+<div class="pb-3 pt-3">
+    <a asp-controller="Promotion" asp-action="Index" class="text-decoration-none text-dark d-flex justify-content-start align-items-baseline">
+        <i class="fas fa-chevron-left fa-sm"></i>
+        <h6 class="pl-2">Back</h6>
+    </a>
+    <h3 class="pt-2 pl-2">Edit promo code</h3>
+</div>
+
+<div class="px-2 pb-3">
+    <form asp-action="Edit" method="post">
+        <div class="form-row pb-2">
+            <div class="col">
+                <div class="form-group">
+                    <label>Promo Code Name</label>
+                    <input asp-for="@Model.name" type="text" class="form-control" placeholder="Promo Code Name">
+                    <span asp-validation-for="@Model.name" class="text-danger small font-italic"></span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>Promo Code Description</label>
+                    <input asp-for="@Model.description" type="text" class="form-control" placeholder="Promo Code Description">
+                    <span asp-validation-for="@Model.description" class="text-danger small font-italic"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-row pb-2">
+            <div class="col">
+                <div class="form-group">
+                    <label class="pr-3">Promo Code Discount</label>
+                    @foreach (var c in System.Enum.GetValues(typeof(DiscountType)).OfType<DiscountType>())
+                    {
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-input" asp-for="@Model.discount_type">@c</label>
+                            <input class="form-check-label mb-2" type="radio" asp-for="@Model.discount_type" value="@((int)c)" checked="@(c == Model?.discount_type)" />
+                        </div>
+                    }
+                    <input asp-for="@Model.discount" type="number" class="form-control" placeholder="Promo Code Discount">
+                    <span asp-validation-for="@Model.discount" class="text-danger small font-italic"></span>
+                    <span asp-validation-for="@Model.discount_type" class="text-danger small font-italic"></span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>Minimum Spend</label>
+                    <input asp-for="@Model.minimum_spend" type="number" class="form-control" placeholder="Minimum Spend">
+                    <span asp-validation-for="@Model.minimum_spend" class="text-danger small font-italic"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-row pb-2">
+            <div class="col">
+                <div class="form-group">
+                    <label>Total Quantity</label>
+                    <input asp-for="@Model.quantity" type="number" class="form-control" placeholder="Total Quantity">
+                    <span asp-validation-for="@Model.quantity" class="text-danger small font-italic"></span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>No. of Redeems Per User</label>
+                    <input asp-for="@Model.num_claim_per_user" type="number" class="form-control" placeholder="No. of Redeems Per User">
+                    <span asp-validation-for="@Model.num_claim_per_user" class="text-danger small font-italic"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-row pb-2">
+            <div class="col">
+                <div class="form-group">
+                    <label>Coupon Validitiy</label>
+                    <input asp-for="@Model.validity" type="date" class="form-control" placeholder="Validitiy">
+                    <span asp-validation-for="@Model.validity" class="text-danger small font-italic"></span>
+                </div>
+            </div>
+            <div class="col"></div>
+        </div>
+        <div>
+            <input class="btn btn-info" type="submit" name="Edit" value="Edit" />
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script>
+        $(function () {
+            $("#PromotionsLink").removeClass("text-dark");
+            $("#PromotionsLink").addClass("text-danger");
+        });
+    </script>
+}

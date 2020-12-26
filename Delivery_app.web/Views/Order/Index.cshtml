@@ -1,0 +1,71 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Orders";
+}
+@model IEnumerable<OrderViewModel>
+
+<div class="pb-3">
+    <h3>Orders</h3>
+</div>
+<div class="d-flex justify-content-between pb-3">
+    <form class="shadow-sm">
+        <div class="input-group">
+            <input class="form-control" type="search" placeholder="Search.." aria-label="Search">
+            <div class="input-group-append">
+                <button class="btn btn-info" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>PickUp Address</th>
+                    <th>Weight</th>
+                    <th>Contact</th>
+                    <th>PickUp datetime</th>
+                    <th>Price</th>
+                    <th>UserId</th>
+                    <th>Delivery Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+                    @foreach (var order in Model)
+                    {
+                        <tr>
+                            <td>@order.order_id</td>
+                            <td>@order.name</td>
+                            <td>@order.pick_up_address</td>
+                            <td>@order.weight</td>
+                            <td>@($"+60{order.contact_num}")</td>
+                            <td>@order.pick_up_datetime</td>
+                            <td>@($"RM{order.price}")</td>
+                            <td>@order.user_id</td>
+                            <td>@order.delivery_status.GetDisplayName()</td>
+                            <td></td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(function () {
+            $("#OrdersLink").removeClass("text-dark");
+            $("#OrdersLink").addClass("text-danger");
+        });
+    </script>
+}

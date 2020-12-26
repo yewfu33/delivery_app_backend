@@ -1,0 +1,77 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Send Email";
+}
+@model EmailModel
+ 
+<div class="pb-3">
+    <h3>Send Email</h3>
+</div>
+
+<div>
+    <form id="emailForm" class="py-2" asp-controller="Email" asp-action="Index" method="post">
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">To<br><small>(Hold <kbd>ctrl</kbd> select multiple)</small></label>
+            <div class="col-sm-6">
+                <select class="form-control" multiple asp-for="@Model.toEmail"
+                        asp-items="@Model.emailList">
+                </select>
+                <span asp-validation-for="@Model.toEmail" class="text-danger small font-italic"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Subject</label>
+            <div class="col-sm-6">
+                <input asp-for="@Model.subject" type="text" class="form-control" placeholder="Subject of your email">
+                <span asp-validation-for="@Model.subject" class="text-danger small font-italic"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Message Body</label>
+            <div class="col-sm-6">
+                <input asp-for="@Model.body" id="messageBody" type="hidden" class="form-control">
+                <div id="editor"></div>
+                <span asp-validation-for="@Model.body" class="text-danger small font-italic"></span>
+            </div>
+        </div>
+        <div class="py-2">
+            <button class="btn btn-info" type="submit">
+                <i class="far fa-paper-plane pr-1"></i>
+                <span>Send</span>
+            </button>
+            <button class="btn btn-outline-secondary" type="reset">
+                <i class="fas fa-redo pr-1"></i>
+                <span>Reset</span>
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script src="~/lib/ckeditor5/ckeditor.js"></script>
+    <script>
+        let Editor;
+        // add ckeditor
+        ClassicEditor
+            .create(document.querySelector('#editor'))
+            .then(editor => {
+                Editor = editor;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+        $(function () {
+            $("#EmailsLink").removeClass("text-dark");
+            $("#EmailsLink").addClass("text-danger");
+
+            $("#emailForm").submit(function (e) {
+                $("#messageBody").val(Editor.getData());
+
+                return true;
+            });
+        });
+    </script>
+}

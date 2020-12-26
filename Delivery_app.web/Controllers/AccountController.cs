@@ -50,8 +50,7 @@ namespace Delivery_app.web.Controllers
             //claims authentication
             var claims = new List<Claim>
              {
-                 new Claim(ClaimTypes.Name, admin.name),
-                 new Claim(ClaimTypes.Email, admin.email)
+                 new Claim(ClaimTypes.Name, admin.email)
              };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
