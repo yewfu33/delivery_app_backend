@@ -46,18 +46,44 @@ namespace Delivery_app.Controllers
             return orders;
         }
 
-        // GET: api/orders/users/5
-        [HttpGet("users/{id}")]
-        public ActionResult<IEnumerable<OrderModel>> GetOrderByUserId(int id)
+        [HttpGet("users/active/{id}")]
+        public async Task<ActionResult<IEnumerable<OrderModel>>> GetActiveOrders(int id)
         {
-            IEnumerable<OrderModel> orders = _orders.GetOrderByUserId(id);
-
-            if (orders == null)
+            try
             {
-                return NotFound();
-            }
+                IEnumerable<OrderModel> orders = await _orders.GetActiveOrders(id);
 
-            return orders.ToList();
+                if (orders == null)
+                {
+                    return NotFound();
+                }
+
+                return orders.ToList();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
+            }
+        }
+
+        [HttpGet("users/completed/{id}")]
+        public async Task<ActionResult<IEnumerable<OrderModel>>> GetCompletedOrders(int id)
+        {
+            try
+            {
+                IEnumerable<OrderModel> orders = await _orders.GetCompletedOrders(id);
+
+                if (orders == null)
+                {
+                    return NotFound();
+                }
+
+                return orders.ToList();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
+            }
         }
 
         // PUT: api/orders/5
@@ -112,7 +138,7 @@ namespace Delivery_app.Controllers
         {
             try
             {
-                await _orders.takeOrder(order_id, courier_id);
+                await _orders.TakeOrder(order_id, courier_id);
 
                 return Ok();
             }catch (Exception e)
@@ -140,7 +166,7 @@ namespace Delivery_app.Controllers
         {
             try
             {
-                var orders = await _orders.fetchCourierTask(courier_id, status);
+                var orders = await _orders.FetchCourierTask(courier_id, status);
 
                 return Ok(orders);
             }

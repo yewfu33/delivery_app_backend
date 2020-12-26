@@ -20,6 +20,7 @@ namespace Delivery_app.Helpers
             CreateMap<Users, UserModel>()
                 .ForMember(um => um.user_type,
                     u => u.MapFrom(y => (int?)y.user_type));
+            CreateMap<Couriers, CourierModel>();
             CreateMap<DropPoints, DropPointModel>();
         }
     }

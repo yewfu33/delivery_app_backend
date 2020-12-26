@@ -40,6 +40,24 @@ namespace Delivery_app.Controllers
             _appSettings = appSettings.Value;
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetCourier(int id)
+        {
+            Couriers courier = _context.couriers.Find(id);
+
+            if (courier == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new { 
+                id = courier.courier_id,
+                profile_pic = courier.profile_picture,
+                name = courier.name,
+                phone_num = courier.phone_num,
+            });
+        }
+
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] CourierLoginModel model)
@@ -137,7 +155,7 @@ namespace Delivery_app.Controllers
         {
             var c = await _context.couriers.FindAsync(model.id);
 
-            if (c == null) return BadRequest(new { message = "Account no found" });
+            if (c == null) return NotFound(new { message = "Account no found" });
 
             if (!c.onBoard.GetValueOrDefault())
             {

@@ -24,7 +24,9 @@ namespace Delivery_app.Models
         public DateTime created_at { get; set; }
         public DateTime updated_at { get; set; }
         public int user_id { get; set; }
+        public int courier_id { get; set; }
         public UserModel user { get; set; }
+        public CourierModel courier { get; set; }
         public ICollection<DropPointModel> drop_points { get; set; }
     }
 }
