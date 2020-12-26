@@ -224,6 +224,47 @@ namespace Delivery_app.Migrations
                     b.ToTable("orders");
                 });
 
+            modelBuilder.Entity("Delivery_app.Entities.PromoCodes", b =>
+                {
+                    b.Property<int>("promo_code_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("created_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("description")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<double>("discount")
+                        .HasColumnType("double");
+
+                    b.Property<byte>("discount_type")
+                        .HasColumnType("tinyint unsigned");
+
+                    b.Property<double>("minimum_spend")
+                        .HasColumnType("double");
+
+                    b.Property<string>("name")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<int>("num_claim_per_user")
+                        .HasColumnType("int");
+
+                    b.Property<int>("quantity")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("updated_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("validity")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("promo_code_id");
+
+                    b.ToTable("promo_codes");
+                });
+
             modelBuilder.Entity("Delivery_app.Entities.Users", b =>
                 {
                     b.Property<int>("user_id")

@@ -17,6 +17,10 @@
     <Compile Remove="Migrations\20201209074717_add-courier_id-field.Designer.cs" />
     <Compile Remove="Migrations\20201209075714_add-c_id-field.cs" />
     <Compile Remove="Migrations\20201209075714_add-c_id-field.Designer.cs" />
+    <Compile Remove="Migrations\20201222094018_add-fk-courier.cs" />
+    <Compile Remove="Migrations\20201222094018_add-fk-courier.Designer.cs" />
+    <Compile Remove="Migrations\20201223084959_optional-foreignkey.cs" />
+    <Compile Remove="Migrations\20201223084959_optional-foreignkey.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,7 +29,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

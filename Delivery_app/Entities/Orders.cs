@@ -13,7 +13,6 @@ namespace Delivery_app.Entities
 {
     public class Orders
     {
-
         [Key]
         public int order_id { get; set; }
 
@@ -38,7 +37,7 @@ namespace Delivery_app.Entities
         public DateTime created_at { get; set; }
         public DateTime updated_at { get; set; }
         public int user_id { get; set; }
-        public int courier_id { get; set; }
+        public int courier_id { get; set; } = 0;
         public Users user { get; }
         public ICollection<DropPoints> drop_points { get; set; }
     }

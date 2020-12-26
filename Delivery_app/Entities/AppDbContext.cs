@@ -40,6 +40,6 @@ namespace Delivery_app.Entities
         public DbSet<Couriers> couriers { get; set; }
         public DbSet<Documents> documents { get; set; }
         public DbSet<Admin> admins { get; set; }
-
+        public DbSet<PromoCodes> promo_codes { get; set; }
     }
 }

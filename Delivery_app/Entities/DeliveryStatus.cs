@@ -9,9 +9,13 @@ namespace Delivery_app.Entities
 {
     public enum DeliveryStatus : byte
     {
+        [Display(Name = "Assigned")]
         Assigned,
+        [Display(Name = "OnDeliver")]
         OnDeliver,
+        [Display(Name = "Completed")]
         Completed,
+        [Display(Name = "Cancelled")]
         Cancelled
     }
 }
