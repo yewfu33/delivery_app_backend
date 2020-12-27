@@ -8,44 +8,43 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/main.css" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
-    <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Alata&family=Roboto+Condensed&display=swap" rel="stylesheet">
+    @RenderSection("Heads", required: false)
 </head>
 <body>
     <div class="wrapper">
         <header class="header">
-            <nav class="navbar navbar-expand navbar-toggleable-sm navbar-dark my-shadow px-4" style="background-color: #D50000;">
+            <nav class="navbar navbar-expand navbar-toggleable navbar-dark my-shadow px-4" style="background-color: #D50000;">
                 <div class="container-fluid">
                     <a class="navbar-brand" asp-controller="Main" asp-action="Index">
                         <img width="116" height="35" src="~/img/cover2-crop.png">
                     </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-
                     <div class="navbar-collapse collapse">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <ul class="navbar-nav ml-auto pr-2"> 
+                            <ul class="navbar-nav ml-auto pr-md-2 pr-0">
                                 <li class="nav-item">
                                     <span class="nav-link text-light d-flex align-items-center">
                                         <img class="rounded-circle img-fluid mr-2" width="28" src="https://stregasystem.com/img/users/user.png" alt="profile" />
-                                        <span>@User.Identity.Name</span>
+                                        <span class="d-none d-md-block">@User.Identity.Name</span>
                                     </span>
                                 </li>
                             </ul>
-                            <form class="form-inline text-white">
+                            <form class="form-inline text-white pr-2 pr-md-0">
                                 <a asp-controller="Account" asp-action="Logout" class="btn btn-light rounded-0 btn-sm my-2 my-sm-0" type="submit">Logout</a>
                             </form>
                         }
                     </div>
+                    <button class="navbar-toggler d-block d-md-none" id="burger-menu" type="button" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
                 </div>
             </nav>
         </header>
 
-        <nav class="nav">
+        <nav class="nav d-none d-md-flex" id="nav">
             <div style="position: relative;overflow: hidden;width: auto;height: 100%;">
                 <div class="w-100 d-flex flex-column pt-4 h-100">
                     <div class="px-4">
@@ -105,7 +104,7 @@
                         </a>
                     </div>
                     <div class="px-4">
-                        <a asp-controller="Order" asp-action="Index" class="d-flex px-1 py-2 text-decoration-none text-dark" id="ReportsLink">
+                        <a asp-controller="Report" asp-action="Index" class="d-flex px-1 py-2 text-decoration-none text-dark" id="ReportsLink">
                             <span class="nav-icon">
                                 <i class="far fa-file-alt"></i>
                             </span>
@@ -113,7 +112,7 @@
                         </a>
                     </div>
                     <div class="px-4">
-                        <a asp-controller="Order" asp-action="Index" class="d-flex px-1 py-2 text-decoration-none text-dark" id="SettingsLink">
+                        <a asp-controller="Setting" asp-action="Index" class="d-flex px-1 py-2 text-decoration-none text-dark" id="SettingsLink">
                             <span class="nav-icon">
                                 <i class="fas fa-sliders-h"></i>
                             </span>
@@ -139,13 +138,21 @@
 
     </div>
     <!-- scripts -->
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script>
         document.addEventListener("submit", function (e) {
             $('#overlay').hide().fadeIn();
         });
+        document.querySelector("#burger-menu").addEventListener("click", function (e) {
+            let isdnone = document.querySelector("#nav").classList.contains("d-none");
+            if (isdnone) {
+                document.querySelector("#nav").classList.remove("d-none");
+            } else {
+                document.querySelector("#nav").classList.add("d-none");
+            }
+        })
     </script>
     <!-- add ntoast -->
     @await Component.InvokeAsync("NToastNotify")
