@@ -9,13 +9,13 @@
 <div class="pb-3">
     <h3>Couriers</h3>
 </div>
-<div class="d-flex justify-content-between pb-3">
+<div class="d-flex justify-content-between pb-3 flex-column flex-sm-row">
     <div>
         <a asp-controller="Courier" asp-action="Index" class="btn @((Model.First().isRegistered) ? "btn-danger" : "btn-outline-secondary")">All</a>
         <a asp-controller="Courier" asp-action="Index" asp-route-status="pending" class="btn @((Model.First().isRegistered) ? "btn-outline-secondary" : "btn-danger")">Pending</a>
     </div>
-    <form asp-controller="Courier" asp-action="Index" class="shadow-sm">
-        <div class="input-group">
+    <form asp-controller="Courier" asp-action="Index" class="shadow-sm pt-3 pt-sm-0">
+        <div class="input-group col-4 col-sm-12">
             <input class="form-control" type="search" name="searchQuery" placeholder="Search.." aria-label="Search">
             <div class="input-group-append">
                 <button class="btn btn-info" type="submit">Search</button>
@@ -67,7 +67,7 @@
                             <td>
                                 @if (!d.isRegistered)
                                 {
-                                    <a asp-controller="Courier" asp-action="AcceptRegistration" asp-route-cid="@d.courier_id" class="btn btn-info btn-sm">Accept</a>
+                                    <a asp-controller="Courier" asp-action="AcceptRegistration" asp-route-cid="@d.courier_id" class="btn btn-info btn-sm">Accept Registration</a>
                                 }
                             </td>
                         </tr>

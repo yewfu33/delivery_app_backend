@@ -83,7 +83,6 @@ namespace Delivery_app.web.Controllers
             {
                 CouriersList = CouriersList.Where(c =>
                     c.name.Contains(searchQuery)
-                    || c.phone_num.Contains(searchQuery)
                     || c.email.Contains(searchQuery)
                     || c.vehicle_plate_no.Contains(searchQuery)
                     ).ToList();

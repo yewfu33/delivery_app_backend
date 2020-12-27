@@ -21,11 +21,22 @@ namespace Delivery_app.web.Controllers
             _mapper = mapper;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchQuery)
         {
-            var orders = await _context.orders.ToListAsync();
+            var orders = await _context.orders
+                                    .OrderByDescending(o => o.created_at)
+                                    .ToListAsync();
 
             var orderViewModel = _mapper.Map<List<Orders> ,List <OrderViewModel>>(orders);
+
+            if (!String.IsNullOrEmpty(searchQuery))
+            {
+                orderViewModel = orderViewModel.Where(o =>
+                    o.name.Contains(searchQuery)
+                    || o.contact_num.Contains(searchQuery)
+                    || o.pick_up_address.Contains(searchQuery)
+                    ).ToList();
+            }
 
             return View(orderViewModel);
         }

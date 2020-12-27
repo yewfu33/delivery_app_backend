@@ -21,11 +21,19 @@ namespace Delivery_app.web.Controllers
             _mapper = mapper;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchQuery)
         {
             var users = await _context.users.ToListAsync();
 
             var userViewModel = _mapper.Map<List<Users>, List<UserViewModel>>(users);
+
+            if (!String.IsNullOrEmpty(searchQuery))
+            {
+                userViewModel = userViewModel.Where(u =>
+                    u.name.Contains(searchQuery)
+                    || u.phone_num.ToString().Contains(searchQuery)
+                    ).ToList();
+            }
 
             return View(userViewModel);
         }

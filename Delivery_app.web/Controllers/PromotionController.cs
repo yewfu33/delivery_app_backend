@@ -24,13 +24,23 @@ namespace Delivery_app.web.Controllers
             _toastNotification = toastNotification;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchQuery)
         {
             try
             {
-                var promoCodes = await _context.promo_codes.ToListAsync();
+                var promoCodes = await _context.promo_codes
+                                            .OrderByDescending(o => o.created_at)
+                                            .ToListAsync();
 
                 var promoCodesModel = _mapper.Map<List<PromoCodes>, List<PromoCodeModel>>(promoCodes);
+
+                if (!String.IsNullOrEmpty(searchQuery))
+                {
+                    promoCodesModel = promoCodesModel.Where(o =>
+                        o.name.Contains(searchQuery)
+                        || o.description.Contains(searchQuery)
+                        ).ToList();
+                }
 
                 return View(promoCodesModel);
             }
