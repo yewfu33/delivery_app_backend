@@ -1,0 +1,19 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="pb-3">
+    <h3>Settings</h3>
+</div>
+
+<div>
+    <div class="d-flex pt-2 pb-4">
+        <span>Logged in as</span>
+        <img class="rounded-circle img-fluid mx-2" width="28" src="https://stregasystem.com/img/users/user.png" alt="profile" />
+        <span>@User.Identity.Name</span>
+    </div>
+    <form class="form-inline text-white">
+        <a asp-controller="Account" asp-action="Logout" class="btn btn-danger rounded-0" type="submit">Logout</a>
+    </form>
+</div>
