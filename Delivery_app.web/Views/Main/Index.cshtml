@@ -10,7 +10,7 @@
                 <img class="img-fluid" width="70" src="~/img/order.svg" />
             </div>
             <div class="d-flex flex-column justify-content-around align-items-center flex-grow-1">
-                <span class="lead font-weight-bolder pb-2">Total Orders</span>
+                <span class="lead font-weight-bolder pb-2">Total Order</span>
                 <span class="lead font-weight-bolder pb-2">@Model.totalOrdersCount</span>
             </div>
         </div>
@@ -21,7 +21,7 @@
                 <img class="img-fluid" width="70" src="~/img/users.svg" />
             </div>
             <div class="d-flex flex-column justify-content-around align-items-center flex-grow-1">
-                <span class="lead font-weight-bolder pb-2">Total Users</span>
+                <span class="lead font-weight-bolder pb-2">Total User</span>
                 <span class="lead font-weight-bolder pb-2">@Model.totalUsersCount</span>
             </div>
         </div>
@@ -32,7 +32,7 @@
                 <img class="img-fluid" width="70" src="~/img/couriers.svg" />
             </div>
             <div class="d-flex flex-column justify-content-around align-items-center flex-grow-1">
-                <span class="lead font-weight-bolder pb-2">Total Couriers</span>
+                <span class="lead font-weight-bolder pb-2">Total Courier</span>
                 <span class="lead font-weight-bolder pb-2">@Model.totalCouriersCount</span>
             </div>
         </div>
@@ -43,20 +43,18 @@
                 <img class="img-fluid" width="70" src="~/img/income.svg" />
             </div>
             <div class="d-flex flex-column justify-content-around align-items-center flex-grow-1">
-                <span class="lead font-weight-bolder pb-2">Total Income</span>
-                <span class="lead font-weight-bolder pb-2">@Model.totalIncome</span>
+                <span class="lead font-weight-bolder pb-2">Total Payment</span>
+                <span class="lead font-weight-bolder pb-2">@Model.totalPayments</span>
             </div>
         </div>
     </div>
 </div>
 
 <div class="row justify-content-center py-3">
-    <div class="col-11 col-sm-6">
+    <div class="col-11 col-sm-7">
         <canvas id="myChart" width="400" height="200"></canvas>
     </div>
-    <div class="col-11 col-sm-6">
-
-    </div>
+    <div class="col-11 col-sm-5"></div>
 </div>
 
 @section Heads
@@ -72,44 +70,62 @@
         $(function () {
             $("#DashboardLink").removeClass("text-dark");
             $("#DashboardLink").addClass("text-danger");
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("monthlyorders", "main")",
+                contentType: "application/json",
+                dataType: "json",
+                success: function (d) {
+
+                    let labels = new Array();
+                    let data = new Array();
+                    var a = new Date();
+                    let length = 31;
+
+                    for (i = 0; i < length; i++){
+                        labels.push(`${i + 1}/${a.getMonth() + 1}`);
+
+                        data.push(0);
+                    }
+
+                    d.forEach(function (dd) {
+                        data[dd.day - 1] = dd.count;
+                    });
+
+                    var ctx = document.getElementById('myChart');
+                    var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: '# of order per day',
+                                data: data,
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.2)',
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                ],
+                                borderWidth: 1.4
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true,
+                                        suggestedMax: 10,
+                                        step: 1
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                }
+            })
         });
 
-        var ctx = document.getElementById('myChart');
-        var myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1.4
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-        });
+
     </script>
 }

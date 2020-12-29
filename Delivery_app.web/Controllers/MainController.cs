@@ -53,5 +53,31 @@ namespace Delivery_app.web.Controllers
                 return View(new DashboardViewModel());
             }
         }
+
+        public async Task<IActionResult> MonthlyOrders()
+        {
+            try
+            {
+                var date = DateTime.Now;
+
+                var monthlydata = await _context.orders
+                                    .Where(o => o.created_at.Month == date.Month)
+                                    .GroupBy(g => new { g.created_at.Day })
+                                    .Select(o =>
+                                        new
+                                        {
+                                            day = o.Key.Day,
+                                            count = o.Count()
+                                        }
+                                    )
+                                    .ToListAsync();
+
+                return Ok(monthlydata);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500);
+            }
+        }
     }
 }
