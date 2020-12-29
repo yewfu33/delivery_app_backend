@@ -17,3 +17,12 @@
         <a asp-controller="Account" asp-action="Logout" class="btn btn-danger rounded-0" type="submit">Logout</a>
     </form>
 </div>
+
+@section Scripts{
+    <script>
+        $(function () {
+            $("#SettingsLink").removeClass("text-dark");
+            $("#SettingsLink").addClass("text-danger");
+        });
+    </script>
+}

@@ -1,0 +1,86 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Edit courier";
+}
+@model CourierViewModel
+
+<div class="pb-3 pt-3">
+    <a asp-controller="Courier" asp-action="Index" class="text-decoration-none text-dark d-flex justify-content-start align-items-baseline">
+        <i class="fas fa-chevron-left fa-sm"></i>
+        <h6 class="pl-2">Back</h6>
+    </a>
+    <h3 class="pt-2 pl-2">Edit Courier</h3>
+</div>
+
+<div class="px-2 pb-3">
+    <form asp-action="Edit" method="post">
+            <div class="custom-control custom-switch pb-3">
+                <input asp-for="@Model.disable" type="checkbox" class="custom-control-input" id="switch">
+                <label class="custom-control-label" for="switch">Disable account</label>
+                <span asp-validation-for="@Model.disable" class="text-danger small font-italic"></span>
+            </div>
+        <div class="form-row pb-2">
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input asp-for="@Model.name" type="text" class="form-control" placeholder="Name">
+                    <span asp-validation-for="@Model.name" class="text-danger small font-italic"></span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    <label>Phone Num</label>
+                    <input asp-for="@Model.phone_num" type="number" class="form-control" placeholder="Phone Num">
+                    <span asp-validation-for="@Model.phone_num" class="text-danger small font-italic"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-row pb-2">
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input asp-for="@Model.email" type="email" class="form-control" placeholder="Email">
+                    <span asp-validation-for="@Model.email" class="text-danger small font-italic"></span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    <label>Vehicle Type</label>
+                    <select class="form-control" asp-for="@Model.vehicle_type" asp-items="@Html.GetEnumSelectList<VehicleType>()">
+                    </select>
+                    <span asp-validation-for="@Model.vehicle_type" class="text-danger small font-italic"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-row pb-2">
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    <label>Vehicle Plate No.</label>
+                    <input asp-for="@Model.vehicle_plate_no" type="text" class="form-control" placeholder="Vehicle Plate No.">
+                    <span asp-validation-for="@Model.vehicle_plate_no" class="text-danger small font-italic"></span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    <label>Commission</label>
+                    <input asp-for="@Model.commission" type="number" class="form-control" placeholder="Commission(%)" min="0" max="1" step="0.1">
+                    <span asp-validation-for="@Model.commission" class="text-danger small font-italic"></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <input class="btn btn-info" type="submit" name="Edit" value="Edit" />
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script>
+        $(function () {
+            $("#CouriersLink").removeClass("text-dark");
+            $("#CouriersLink").addClass("text-danger");
+        });
+    </script>
+}

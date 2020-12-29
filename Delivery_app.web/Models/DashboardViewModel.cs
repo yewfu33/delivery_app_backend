@@ -10,6 +10,6 @@ namespace Delivery_app.web.Models
         public int totalOrdersCount { get; set; }
         public int totalCouriersCount { get; set; }
         public int totalUsersCount { get; set; }
-        public int totalIncome { get; set; }
+        public int totalPayments { get; set; }
     }
 }

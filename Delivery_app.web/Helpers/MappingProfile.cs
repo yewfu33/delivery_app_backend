@@ -13,8 +13,9 @@ namespace Delivery_app.web.Helpers
         public MappingProfile()
         {
             CreateMap<Orders, OrderViewModel>();
-            CreateMap<Users, UserViewModel>();
+            CreateMap<Users, UserViewModel>().ReverseMap();
             CreateMap<PromoCodes, PromoCodeModel>().ReverseMap();
+            CreateMap<Couriers, CourierViewModel>().ReverseMap();
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Delivery_app.web.Controllers
                                     .OrderByDescending(o => o.created_at)
                                     .ToListAsync();
 
-            var orderViewModel = _mapper.Map<List<Orders> ,List <OrderViewModel>>(orders);
+            var orderViewModel = _mapper.Map<List<Orders>, List <OrderViewModel>>(orders);
 
             if (!String.IsNullOrEmpty(searchQuery))
             {

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Delivery_app.web.Services;
 using NToastNotify;
 using Delivery_app.web.Models;
+using AutoMapper;
 
 namespace Delivery_app.web.Controllers
 {
@@ -17,6 +18,7 @@ namespace Delivery_app.web.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IEmailService _emailService;
+        private readonly IMapper _mapper;
         private readonly IToastNotification _toastNotification;
         private readonly MailSettings _mailSettings;
         private Random random = new Random();
@@ -24,10 +26,12 @@ namespace Delivery_app.web.Controllers
         public CourierController(AppDbContext context, 
             IOptions<MailSettings> mailSettings, 
             IEmailService emailService,
+            IMapper mapper,
             IToastNotification toastNotification)
         {
             _context = context;
             _emailService = emailService;
+            _mapper = mapper;
             _toastNotification = toastNotification;
             _mailSettings = mailSettings.Value;
         }
@@ -53,6 +57,8 @@ namespace Delivery_app.web.Controllers
                         documents = c.documents,
                         created_at = c.created_at,
                         updated_at = c.updated_at,
+                        disable = c.disable,
+                        commission = c.commission,
                         isRegistered = false
                     }
                 ).ToListAsync();
@@ -74,6 +80,8 @@ namespace Delivery_app.web.Controllers
                         documents = c.documents,
                         created_at = c.created_at,
                         updated_at = c.updated_at,
+                        disable = c.disable,
+                        commission = c.commission,
                         isRegistered = true
                     }
                 ).ToListAsync();
@@ -91,11 +99,71 @@ namespace Delivery_app.web.Controllers
             return View(CouriersList);
         }
 
-        public async Task<IActionResult> AcceptRegistration(int cid)
+        public async Task<IActionResult> Edit(int id)
         {
             try
             {
-                var courier = await _context.couriers.FindAsync(cid);
+                var courier = await _context.couriers.FindAsync(id);
+
+                if(courier == null)
+                {
+                    _toastNotification.AddErrorToastMessage($"Failed to fetch edit courier.");
+                    return RedirectToAction("Index");
+                }
+
+                var courierViewModel = _mapper.Map<CourierViewModel>(courier);
+
+                return View(courierViewModel);
+            }
+            catch (Exception)
+            {
+                _toastNotification.AddErrorToastMessage($"Error occured, try again later.");
+                return RedirectToAction("Index");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, CourierViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var courier = await _context.couriers.FindAsync(id);
+
+            if (courier == null)
+            {
+                _toastNotification.AddErrorToastMessage($"Failed to edit.");
+                return View(model);
+            }
+
+            var editCourier = _mapper.Map<Couriers>(model);
+
+            // update fields
+            courier.name = editCourier.name;
+            courier.phone_num = editCourier.phone_num;
+            courier.email = editCourier.email;
+            courier.vehicle_plate_no = editCourier.vehicle_plate_no;
+            courier.vehicle_type = editCourier.vehicle_type;
+            courier.commission = editCourier.commission;
+            courier.disable = editCourier.disable;
+            courier.updated_at = DateTime.Now;
+
+            _context.couriers.Update(courier);
+
+            await _context.SaveChangesAsync();
+
+            _toastNotification.AddInfoToastMessage("Edited successfully.");
+
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> AcceptRegistration(int id)
+        {
+            try
+            {
+                var courier = await _context.couriers.FindAsync(id);
 
                 if (courier == null)
                 {
@@ -137,7 +205,7 @@ namespace Delivery_app.web.Controllers
             }
             catch (Exception ex)
             {
-                _toastNotification.AddErrorToastMessage($"Server error occured: ${ex.Message}");
+                _toastNotification.AddErrorToastMessage($"Error occured, try again later.");
                 return RedirectToAction("Index");
             }
 
