@@ -55,8 +55,16 @@ namespace Delivery_app.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<double>("commission")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("double")
+                        .HasDefaultValue(0.80000000000000004);
+
                     b.Property<DateTime>("created_at")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("disable")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("email")
                         .HasColumnType("VARCHAR(50)");
@@ -224,6 +232,51 @@ namespace Delivery_app.Migrations
                     b.ToTable("orders");
                 });
 
+            modelBuilder.Entity("Delivery_app.Entities.Payments", b =>
+                {
+                    b.Property<int>("payment_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<double>("amount")
+                        .HasColumnType("double");
+
+                    b.Property<int>("courier_id")
+                        .HasColumnType("int");
+
+                    b.Property<double>("courier_pay")
+                        .HasColumnType("double");
+
+                    b.Property<byte>("courier_payment_status")
+                        .HasColumnType("tinyint unsigned");
+
+                    b.Property<DateTime>("created_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("order_id")
+                        .HasColumnType("int");
+
+                    b.Property<byte>("order_status")
+                        .HasColumnType("tinyint unsigned");
+
+                    b.Property<byte>("payment_method")
+                        .HasColumnType("tinyint unsigned");
+
+                    b.Property<int>("user_id")
+                        .HasColumnType("int");
+
+                    b.HasKey("payment_id");
+
+                    b.HasIndex("courier_id");
+
+                    b.HasIndex("order_id")
+                        .IsUnique();
+
+                    b.HasIndex("user_id");
+
+                    b.ToTable("payments");
+                });
+
             modelBuilder.Entity("Delivery_app.Entities.PromoCodes", b =>
                 {
                     b.Property<int>("promo_code_id")
@@ -280,6 +333,9 @@ namespace Delivery_app.Migrations
                     b.Property<string>("fcm_token")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<bool>("locked")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("name")
                         .HasColumnType("VARCHAR(50)");
 
@@ -323,6 +379,27 @@ namespace Delivery_app.Migrations
 
             modelBuilder.Entity("Delivery_app.Entities.Orders", b =>
                 {
+                    b.HasOne("Delivery_app.Entities.Users", "user")
+                        .WithMany()
+                        .HasForeignKey("user_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Delivery_app.Entities.Payments", b =>
+                {
+                    b.HasOne("Delivery_app.Entities.Couriers", "courier")
+                        .WithMany()
+                        .HasForeignKey("courier_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Delivery_app.Entities.Orders", "order")
+                        .WithOne()
+                        .HasForeignKey("Delivery_app.Entities.Payments", "order_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Delivery_app.Entities.Users", "user")
                         .WithMany()
                         .HasForeignKey("user_id")

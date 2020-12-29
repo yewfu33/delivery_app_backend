@@ -9,7 +9,9 @@ namespace Delivery_app.Entities
 {
     public enum VehicleType : byte
     {
+        [Display(Name = "MotorBike")]
         MotorBike,
+        [Display(Name = "Car")]
         Car
     }
 }

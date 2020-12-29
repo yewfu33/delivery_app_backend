@@ -24,6 +24,21 @@ namespace Delivery_app.Entities
                 .WithMany()
                 .HasForeignKey(_ => _.user_id);
 
+            modelBuilder.Entity<Payments>()
+                .HasOne(_ => _.order)
+                .WithOne()
+                .HasForeignKey<Payments>(_ => _.order_id);
+
+            modelBuilder.Entity<Payments>()
+                .HasOne(_ => _.courier)
+                .WithMany()
+                .HasForeignKey(_ => _.courier_id);
+
+            modelBuilder.Entity<Payments>()
+                .HasOne(_ => _.user)
+                .WithMany()
+                .HasForeignKey(_ => _.user_id);
+
             modelBuilder.Entity<Couriers>()
                 .HasMany(_ => _.documents)
                 .WithOne()
@@ -32,6 +47,10 @@ namespace Delivery_app.Entities
             modelBuilder.Entity<Couriers>()
                 .Property(_ => _.onBoard)
                 .HasDefaultValue(true);
+
+            modelBuilder.Entity<Couriers>()
+                .Property(_ => _.commission)
+                .HasDefaultValue(0.8);
         }
 
         public DbSet<Users> users { get; set; }
@@ -41,5 +60,6 @@ namespace Delivery_app.Entities
         public DbSet<Documents> documents { get; set; }
         public DbSet<Admin> admins { get; set; }
         public DbSet<PromoCodes> promo_codes { get; set; }
+        public DbSet<Payments> payments { get; set; }
     }
 }

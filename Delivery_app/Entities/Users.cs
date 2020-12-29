@@ -24,6 +24,7 @@ namespace Delivery_app.Entities
         public string email { get; set; }
         public string fcm_token { get; set; }
         public UserType user_type { get; set; }
+        public bool locked { get; set; }
         public DateTime created_at { get; set; }
         public DateTime updated_at { get; set; }
     }
