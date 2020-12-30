@@ -8,7 +8,6 @@ using Delivery_app.Models;
 using Delivery_app.Services;
 using Microsoft.AspNetCore.Authorization;
 using Delivery_app.Entities;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 
 namespace Delivery_app.Controllers
@@ -19,10 +18,12 @@ namespace Delivery_app.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly IOrderService _orders;
+        private readonly AppDbContext _context;
 
-        public OrdersController(IOrderService orders)
+        public OrdersController(IOrderService orders, AppDbContext context)
         {
             this._orders = orders;
+            _context = context;
         }
 
         // GET: api/orders
@@ -173,6 +174,54 @@ namespace Delivery_app.Controllers
             catch (Exception e)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, new { message = e.Message });
+            }
+        }
+
+        [HttpPost("promocode")]
+        public async Task<ActionResult> PromoCode(AppyPromoCodeModel model)
+        {
+            try
+            {
+                var promoCode = await _context.promo_codes.FirstOrDefaultAsync(p => p.name == model.promo_code);
+
+                if(promoCode == null)
+                {
+                    return NotFound(new { message = "No promo code found" });
+                }
+
+                if(model.order_fee < promoCode.minimum_spend)
+                {
+                    return BadRequest(new { message = $"Minimum spend RM{promoCode.minimum_spend} required for this promo code" });
+                }
+
+                if(promoCode.quantity == 0)
+                {
+                    return BadRequest(new { message = "Promo code out of claim quantity" });
+                }
+
+                var checkValidity = DateTime.Compare(DateTime.Now, promoCode.validity);
+                if(checkValidity > 0)
+                {
+                    return BadRequest(new { message = "Promo code is expired" });
+                }
+
+                var discount = 0.0;
+                if(promoCode.discount_type == DiscountType.Percent)
+                {
+                    discount = (model.order_fee * promoCode.discount) / 100;
+                }
+                else if(promoCode.discount_type == DiscountType.Value)
+                {
+                    discount = (model.order_fee - promoCode.discount);
+                }
+
+                return Ok(new { 
+                    discount = discount
+                });
+            }
+            catch(Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
             }
         }
 
