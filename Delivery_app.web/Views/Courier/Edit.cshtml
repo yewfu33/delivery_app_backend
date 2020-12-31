@@ -16,11 +16,15 @@
 
 <div class="px-2 pb-3">
     <form asp-action="Edit" method="post">
-            <div class="custom-control custom-switch pb-3">
-                <input asp-for="@Model.disable" type="checkbox" class="custom-control-input" id="switch">
-                <label class="custom-control-label" for="switch">Disable account</label>
-                <span asp-validation-for="@Model.disable" class="text-danger small font-italic"></span>
-            </div>
+        <div class="custom-control custom-switch pb-3">
+            <input asp-for="@Model.disable" type="checkbox" class="custom-control-input" id="switch">
+            <label class="custom-control-label" for="switch">Disable account</label>
+            <span asp-validation-for="@Model.disable" class="text-danger small font-italic"></span>
+        </div>
+        <div class="form-group">
+            <input type="hidden" asp-for="@Model.courier_id" />
+            <span asp-validation-for="@Model.courier_id" class="text-danger small font-italic"></span>
+        </div>
         <div class="form-row pb-2">
             <div class="col-12 col-md-6">
                 <div class="form-group">

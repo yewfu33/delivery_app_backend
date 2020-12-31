@@ -114,6 +114,12 @@ namespace Delivery_app.web.Controllers
                 return View(model);
             }
 
+            if (id != model.promo_code_id)
+            {
+                ModelState.AddModelError("promo_code_id", "Id is not the same");
+                return View(model);
+            }
+
             try
             {
                 if (id == 0)

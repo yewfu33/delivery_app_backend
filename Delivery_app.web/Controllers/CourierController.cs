@@ -130,6 +130,12 @@ namespace Delivery_app.web.Controllers
                 return View(model);
             }
 
+            if (id != model.courier_id)
+            {
+                ModelState.AddModelError("courier_id", "Id is not the same");
+                return View(model);
+            }
+
             var courier = await _context.couriers.FindAsync(id);
 
             if (courier == null)

@@ -16,6 +16,10 @@
 
 <div class="px-2 pb-3">
     <form asp-action="Edit" method="post">
+        <div class="form-group">
+            <input type="hidden" asp-for="@Model.promo_code_id" />
+            <span asp-validation-for="@Model.promo_code_id" class="text-danger small font-italic"></span>
+        </div>
         <div class="form-row pb-2">
             <div class="col">
                 <div class="form-group">

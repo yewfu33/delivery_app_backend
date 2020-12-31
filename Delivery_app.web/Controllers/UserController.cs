@@ -73,6 +73,12 @@ namespace Delivery_app.web.Controllers
                 return View(model);
             }
 
+            if (id != model.user_id)
+            {
+                ModelState.AddModelError("user_id", "Id is not the same");
+                return View(model);
+            }
+
             var user = await _context.users.FindAsync(id);
 
             if (user == null)
@@ -125,12 +131,18 @@ namespace Delivery_app.web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
+        public async Task<IActionResult> ResetPassword(int id, ResetPasswordModel model)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
+                    return View(model);
+                }
+
+                if (id != model.id)
+                {
+                    ModelState.AddModelError("id", "Id is not the same");
                     return View(model);
                 }
 
