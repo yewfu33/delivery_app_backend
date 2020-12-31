@@ -18,9 +18,11 @@ namespace Delivery_app.Services
         Task AddOrder(Orders order);
         Task EditOrder(int id, Orders order);
         Task TakeOrder(int id, int courier_id);
+        Task CancelOrder(int id);
         Task<int> updateStatus(int id, int status);
         Task<OrderModel> DeleteOrder(int id);
         Task<List<OrderModel>> FetchCourierTask(int courier_id, int status);
+        Task<List<OrderModel>> searchOrders(string query);
         bool OrderExist(int id);
     }
 
@@ -83,7 +85,7 @@ namespace Delivery_app.Services
             try
             {
                 List<Orders> orders = await _context.orders
-                .Where(o => o.courier_id == 0)
+                .Where(o => o.courier_id == 0 && o.delivery_status == DeliveryStatus.Assigned)
                 .Include(o => o.drop_points)
                 .Include(o => o.user)
                 .ToListAsync();
@@ -246,6 +248,54 @@ namespace Delivery_app.Services
                                 .ToListAsync();
 
                 return _mapper.Map<List<Orders>, List<OrderModel>>(orders);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public async Task<List<OrderModel>> searchOrders(string query)
+        {
+            try
+            {
+                var orders = from o in _context.orders
+                             select o;
+
+                if (!String.IsNullOrEmpty(query))
+                {
+                    orders = orders
+                            .Where(s =>
+                                s.name.Contains(query)
+                                || s.pick_up_address.Contains(query)
+                                || s.comment.Contains(query))
+                            .Include(d => d.drop_points);
+                }
+
+                return _mapper.Map<List<Orders>, List<OrderModel>>(await orders.ToListAsync());
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public async Task CancelOrder(int id)
+        {
+            try
+            {
+                var order = await _context.orders.FindAsync(id);
+
+                if(order == null) throw new Exception("Order no found");
+
+                if(order.delivery_status != DeliveryStatus.Assigned)
+                    throw new Exception("In delivery or completed order cannot be cancel, please contact support");
+
+                // othherwise set order cancelled
+                order.delivery_status = DeliveryStatus.Cancelled;
+
+                _context.orders.Update(order);
+                await _context.SaveChangesAsync();
             }
             catch (Exception e)
             {

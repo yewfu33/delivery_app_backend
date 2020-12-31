@@ -28,9 +28,17 @@ namespace Delivery_app.Controllers
 
         // GET: api/orders
         [HttpGet]
-        public async Task<IEnumerable<OrderModel>> Getorders()
+        public async Task<ActionResult<IEnumerable<OrderModel>>> Getorders()
         {
-            return await _orders.GetAllOrders();
+            try
+            {
+                IEnumerable<OrderModel> orders = await _orders.GetAllOrders();
+                return orders.ToList();
+            }
+            catch(Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
+            }
         }
 
         // GET: api/orders/5
@@ -222,6 +230,33 @@ namespace Delivery_app.Controllers
             catch(Exception e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
+            }
+        }
+
+        [HttpPost("search")]
+        public async Task<ActionResult> SearchOrders([FromQuery] string query)
+        {
+            try
+            {
+                return Ok(await _orders.searchOrders(query));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
+            }
+        }
+
+        [HttpPost("cancel/{order_id}")]
+        public async Task<ActionResult> CancelOrder(int order_id)
+        {
+            try
+            {
+                await _orders.CancelOrder(order_id);
+                return Ok();
+            }
+            catch(Exception e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { message = e.Message });
             }
         }
 
