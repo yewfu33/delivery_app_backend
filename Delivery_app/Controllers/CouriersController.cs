@@ -41,21 +41,37 @@ namespace Delivery_app.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetCourier(int id)
+        public async Task<IActionResult> GetCourier(int id)
         {
-            Couriers courier = _context.couriers.Find(id);
+            Couriers courier = await _context.couriers.FindAsync(id);
 
             if (courier == null)
             {
                 return NotFound();
             }
 
-            return Ok(new { 
+            return Ok(new {
                 id = courier.courier_id,
-                profile_pic = courier.profile_picture,
                 name = courier.name,
                 phone_num = courier.phone_num,
+                commission = courier.commission,
+                email = courier.email,
+                profile_pic = courier.profile_picture,
+                onBoard = courier.onBoard
             });
+        }
+
+        [HttpGet("commission/{id}")]
+        public async Task<IActionResult> GetCourierCommission(int id)
+        {
+            Couriers courier = await _context.couriers.FindAsync(id);
+
+            if (courier == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(courier.commission);
         }
 
         [AllowAnonymous]
