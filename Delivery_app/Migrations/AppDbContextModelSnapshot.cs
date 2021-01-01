@@ -256,9 +256,6 @@ namespace Delivery_app.Migrations
                     b.Property<int>("order_id")
                         .HasColumnType("int");
 
-                    b.Property<byte>("order_status")
-                        .HasColumnType("tinyint unsigned");
-
                     b.Property<byte>("payment_method")
                         .HasColumnType("tinyint unsigned");
 
