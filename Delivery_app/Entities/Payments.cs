@@ -30,8 +30,8 @@ namespace Delivery_app.Entities
         public Users user { get; set; }
         public int courier_id { get; set; }
         public Couriers courier { get; set; }
-        public PaymentMethod payment_method { get; set; }
-        public CourierPaymentStatus courier_payment_status { get; set; }
+        public PaymentMethod payment_method { get; set; } = PaymentMethod.Cash;
+        public CourierPaymentStatus courier_payment_status { get; set; } = CourierPaymentStatus.Unsettled;
         public DateTime created_at { get; set; }
     }
 }

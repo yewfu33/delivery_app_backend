@@ -22,6 +22,7 @@ namespace Delivery_app.Helpers
                     u => u.MapFrom(y => (int?)y.user_type));
             CreateMap<Couriers, CourierModel>();
             CreateMap<DropPoints, DropPointModel>();
+            CreateMap<AddPaymentModel, Payments>();
         }
     }
 }

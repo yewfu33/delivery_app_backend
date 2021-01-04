@@ -19,6 +19,7 @@ namespace Delivery_app.Services
         Task EditOrder(int id, Orders order);
         Task TakeOrder(int id, int courier_id);
         Task CancelOrder(int id);
+        Task OrderPayment(AddPaymentModel model);
         Task<int> updateStatus(int id, int status);
         Task<OrderModel> DeleteOrder(int id);
         Task<List<OrderModel>> FetchCourierTask(int courier_id, int status);
@@ -295,6 +296,21 @@ namespace Delivery_app.Services
                 order.delivery_status = DeliveryStatus.Cancelled;
 
                 _context.orders.Update(order);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public async Task OrderPayment(AddPaymentModel model)
+        {
+            try
+            {
+                var payment = _mapper.Map<Payments>(model);
+                payment.created_at = DateTime.Now;
+                await _context.payments.AddAsync(payment);
                 await _context.SaveChangesAsync();
             }
             catch (Exception e)

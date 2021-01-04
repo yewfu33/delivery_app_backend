@@ -186,7 +186,7 @@ namespace Delivery_app.Controllers
         }
 
         [HttpPost("promocode")]
-        public async Task<ActionResult> PromoCode(AppyPromoCodeModel model)
+        public async Task<ActionResult> PromoCode(ApplyPromoCodeModel model)
         {
             try
             {
@@ -226,6 +226,20 @@ namespace Delivery_app.Controllers
                 return Ok(new { 
                     discount = discount
                 });
+            }
+            catch(Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
+            }
+        }
+
+        [HttpPost("payment")]
+        public async Task<ActionResult> Payment(AddPaymentModel model)
+        {
+            try
+            {
+                await _orders.OrderPayment(model);
+                return Ok();
             }
             catch(Exception e)
             {
