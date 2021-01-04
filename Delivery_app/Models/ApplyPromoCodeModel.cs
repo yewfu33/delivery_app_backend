@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Delivery_app.Models
 {
-    public class AppyPromoCodeModel
+    public class ApplyPromoCodeModel
     {
         [Required]
         public double order_fee { get; set; }
