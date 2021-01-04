@@ -21,7 +21,7 @@ namespace Delivery_app.Entities
 
             modelBuilder.Entity<Orders>()
                 .HasOne(_ => _.user)
-                .WithMany()
+                .WithMany(_ => _.orders)
                 .HasForeignKey(_ => _.user_id);
 
             modelBuilder.Entity<Payments>()
