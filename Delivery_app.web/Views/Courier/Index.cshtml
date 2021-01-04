@@ -17,8 +17,8 @@
         <a asp-controller="Courier" asp-action="Index" asp-route-status="pending" class="btn @((Model.First().isRegistered) ? "btn-outline-secondary" : "btn-danger")">Pending</a>
         }
     </div>
-    <form asp-controller="Courier" asp-action="Index" class="shadow-sm pt-3 pt-sm-0">
-        <div class="input-group col-4 col-sm-12">
+    <form asp-controller="Courier" asp-action="Index" class="shadow-none shadow-sm pt-3 pt-sm-0">
+        <div class="input-group col-3 col-sm-12 px-0">
             <input class="form-control" type="search" name="searchQuery" placeholder="Search.." aria-label="Search">
             <div class="input-group-append">
                 <button class="btn btn-info" type="submit">Search</button>
@@ -28,7 +28,7 @@
 </div>
 
 <div>
-    <div class="table-responsive text-center">
+    <div class="table-responsive table-bordered text-center">
         <table class="table table-striped table-hover">
             <thead class="">
                 <tr>
