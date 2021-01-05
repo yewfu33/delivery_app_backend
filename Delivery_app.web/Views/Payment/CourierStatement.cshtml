@@ -1,0 +1,103 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IEnumerable<CourierStatementModel>
+
+<div class="pb-3">
+    <h3>Payments</h3>
+</div>
+
+<div class="d-flex pb-3 flex-wrap">
+    <a asp-action="OrderStatement" class="mr-3 mb-2 btn btn-outline-danger rounded">
+        <i class="fas fa-users pr-2"></i>
+        Order Statement
+    </a>
+    <a asp-action="OrderSettlement" class="mr-3 mb-2 btn btn-outline-danger rounded">
+        <i class="fas fa-users pr-2"></i>
+        Order Settlement
+    </a>
+    <a asp-action="CourierStatement" class="mr-3 mb-2 btn btn-danger rounded">
+        <i class="fas fa-box-open pr-2"></i>
+        Courier Statement
+    </a>
+    <a asp-action="CourierSettlement" class="mr-3 mb-2 btn btn-outline-danger rounded">
+        <i class="fas fa-users pr-2"></i>
+        Courier Settlement
+    </a>
+</div>
+<div class="d-flex justify-content-between pb-3 flex-column flex-sm-row">
+    <form class="shadow-none shadow-sm pb-3 pb-sm-0">
+        <div class="input-group col-4 col-sm-12 px-0">
+            <input class="form-control" type="search" name="searchQuery" placeholder="Search.." aria-label="Search">
+            <div class="input-group-append">
+                <button class="btn btn-info" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+    <div>
+        <a asp-action="DownloadCourierStatementCSVFile" class="btn btn-outline-danger">
+            <i class="fas fa-file-csv pr-2"></i>
+            Download CSV
+        </a>
+    </div>
+</div>
+
+<div>
+    <div class="table-responsive table-bordered text-center">
+        <table class="table table-striped table-hover">
+            <thead class="">
+                <tr>
+                    <th>#</th>
+                    <th>Order Id</th>
+                    <th>Courier</th>
+                    <th>Commission(%)</th>
+                    <th>Created On</th>
+                    <th>Order Amount</th>
+                    <th>Courier Pay</th>
+                    <th>Payment Method</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count() != 0)
+                {
+                    @foreach (var d in Model)
+                    {
+                        if (d != null)
+                        {
+                            <tr>
+                                <td>@d.payment_id</td>
+                                <td>@d.order_id</td>
+                                <td>@d.courier</td>
+                                <td>@d.commission</td>
+                                <td>@d.created_on</td>
+                                <td>@($"RM{d.order_amount}")</td>
+                                <td>@($"RM{d.courier_pay}")</td>
+                                <td>@d.payment_method.GetDisplayName()</td>
+                                <td>@d.courier_payment_status.GetDisplayName()</td>
+                            </tr>
+                        }
+                    }
+                }
+                else
+                {
+                    <tr>
+                        No record found.
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        $(function () {
+            $("#PaymentLink").removeClass("text-dark");
+            $("#PaymentLink").addClass("text-danger");
+        });
+    </script>
+}

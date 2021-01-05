@@ -104,11 +104,19 @@
                         </a>
                     </div>
                     <div class="px-4">
-                        <a asp-controller="Report" asp-action="Index" class="d-flex px-1 py-2 text-decoration-none text-dark" id="ReportLink">
+                        <a asp-controller="Report" asp-action="UserReport" class="d-flex px-1 py-2 text-decoration-none text-dark" id="ReportLink">
                             <span class="nav-icon">
                                 <i class="far fa-file-alt"></i>
                             </span>
                             <span class="nav-text">Reports</span>
+                        </a>
+                    </div>
+                    <div class="px-4">
+                        <a asp-controller="Payment" asp-action="OrderStatement" class="d-flex px-1 py-2 text-decoration-none text-dark" id="PaymentLink">
+                            <span class="nav-icon">
+                                <i class="fas fa-money-check"></i>
+                            </span>
+                            <span class="nav-text">Payments</span>
                         </a>
                     </div>
                     <div class="px-4">

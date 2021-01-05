@@ -40,6 +40,8 @@ namespace Delivery_app.web.Controllers
                 IQueryable<Couriers> couriers = _context.couriers;
                 model.totalCouriersCount = await couriers.CountAsync();
 
+                model.totalPayments = Convert.ToInt32(await _context.payments.SumAsync(p => p.amount));
+
                 return View(model);
             }
             catch (Exception)

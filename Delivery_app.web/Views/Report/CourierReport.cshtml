@@ -3,20 +3,29 @@
 *@
 @{
 }
-@model IEnumerable<UserReportModel>
+@model IEnumerable<CourierReportModel>
 
 <div class="pb-3">
     <h3>Reports</h3>
 </div>
 
 <div class="d-flex pb-3 flex-wrap">
-    <a href="#" class="mr-3 mb-2 btn btn-outline-danger rounded">User Report</a>
-    <a href="#" class="mr-3 mb-2 btn btn-outline-danger rounded">Order Report</a>
-    <a href="#" class="mr-3 mb-2 btn btn-outline-danger rounded">Courier Report</a>
+    <a asp-action="UserReport" class="mr-3 mb-2 btn btn-outline-danger rounded">
+        <i class="fas fa-users pr-2"></i>
+        User Report
+    </a>
+    <a asp-action="OrderReport" class="mr-3 mb-2 btn btn-outline-danger rounded">
+        <i class="fas fa-box-open pr-2"></i>
+        Order Report
+    </a>
+    <a asp-action="CourierReport" class="mr-3 mb-2 btn btn-danger rounded">
+        <i class="fas fa-people-carry pr-2"></i>
+        Courier Report
+    </a>
 </div>
 <div class="d-flex justify-content-between pb-3 flex-column flex-sm-row">
     <form class="shadow-none shadow-sm pb-3 pb-sm-0">
-        <div class="input-group col-12 px-0">
+        <div class="input-group col-4 col-sm-12 px-0">
             <input class="form-control" type="search" name="searchQuery" placeholder="Search.." aria-label="Search">
             <div class="input-group-append">
                 <button class="btn btn-info" type="submit">Search</button>
@@ -24,7 +33,7 @@
         </div>
     </form>
     <div>
-        <a asp-action="DownloadCSVFile" class="btn btn-outline-danger" type="button">
+        <a asp-action="DownloadCourierReportCSVFile" class="btn btn-outline-danger">
             <i class="fas fa-file-csv pr-2"></i>
             Download CSV
         </a>
@@ -38,10 +47,9 @@
                 <tr>
                     <th>#</th>
                     <th>Name</th>
-                    <th>Phone Num</th>
                     <th>Email</th>
-                    <th>Created At</th>
-                    <th>Total Orders</th>
+                    <th>Total Deliver</th>
+                    <th>Revenue</th>
                 </tr>
             </thead>
             <tbody>
@@ -52,12 +60,11 @@
                         if (d != null)
                         {
                             <tr>
-                                <td>@d.user_id</td>
+                                <td>@d.courier_id</td>
                                 <td>@d.name</td>
-                                <td>@d.phone_num</td>
                                 <td>@d.email</td>
-                                <td>@d.created_at</td>
-                                <td>@d.total_orders</td>
+                                <td>@d.total_deliver</td>
+                                <td>@($"RM{d.revenue}")</td>
                             </tr>
                         }
                     }

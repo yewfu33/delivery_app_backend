@@ -33,6 +33,6 @@ namespace Delivery_app.web.Models
         public bool disable { get; set; }
         public DateTime created_at { get; set; }
         public DateTime updated_at { get; set; }
-        public bool isRegistered { get; set; }
+        public bool isRegistered { get; set; } = false;
     }
 }

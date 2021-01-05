@@ -1,0 +1,92 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IEnumerable<OrderReportModel>
+
+<div class="pb-3">
+    <h3>Reports</h3>
+</div>
+
+<div class="d-flex pb-3 flex-wrap">
+    <a asp-action="UserReport" class="mr-3 mb-2 btn btn-outline-danger rounded">
+        <i class="fas fa-users pr-2"></i>
+        User Report
+    </a>
+    <a asp-action="OrderReport" class="mr-3 mb-2 btn btn-danger rounded">
+        <i class="fas fa-box-open pr-2"></i>
+        Order Report
+    </a>
+    <a asp-action="CourierReport" class="mr-3 mb-2 btn btn-outline-danger rounded">
+        <i class="fas fa-people-carry pr-2"></i>
+        Courier Report
+    </a>
+</div>
+<div class="d-flex justify-content-between pb-3 flex-column flex-sm-row">
+    <form class="shadow-none shadow-sm pb-3 pb-sm-0">
+        <div class="input-group col-4 col-sm-12 px-0">
+            <input class="form-control" type="search" name="searchQuery" placeholder="Search.." aria-label="Search">
+            <div class="input-group-append">
+                <button class="btn btn-info" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+    <div>
+        <a asp-action="DownloadOrderReportCSVFile" class="btn btn-outline-danger">
+            <i class="fas fa-file-csv pr-2"></i>
+            Download CSV
+        </a>
+    </div>
+</div>
+
+<div>
+    <div class="table-responsive table-bordered text-center">
+        <table class="table table-striped table-hover">
+            <thead class="">
+                <tr>
+                    <th>#</th>
+                    <th>Username</th>
+                    <th>Delivery Item</th>
+                    <th>Created On</th>
+                    <th>Courier</th>
+                    <th>Delivery Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count() != 0)
+                {
+                    @foreach (var d in Model)
+                    {
+                        if (d != null)
+                        {
+                            <tr>
+                                <td>@d.order_id</td>
+                                <td>@d.username</td>
+                                <td>@d.delivery_item</td>
+                                <td>@d.created_on</td>
+                                <td>@d.courier</td>
+                                <td>@d.delivery_status.GetDisplayName()</td>
+                            </tr>
+                        }
+                    }
+                }
+                else
+                {
+                    <tr>
+                        No record found.
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(function () {
+            $("#ReportLink").removeClass("text-dark");
+            $("#ReportLink").addClass("text-danger");
+        });
+    </script>
+}
