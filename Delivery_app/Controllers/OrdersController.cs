@@ -131,15 +131,23 @@ namespace Delivery_app.Controllers
         [HttpPost]
         public async Task<ActionResult> PostOrder(Orders order)
         {
-            if (order != null)
+            try
             {
-                await _orders.AddOrder(order);
-            } else
-            {
-                return BadRequest();
-            }
+                if (order != null)
+                {
+                    await _orders.AddOrder(order);
+                }
+                else
+                {
+                    return BadRequest();
+                }
 
-            return CreatedAtAction("GetOrders", new { id = order.order_id });
+                return CreatedAtAction("GetOrders", new { id = order.order_id });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
+            }
         }
 
         [HttpPost("take/{order_id}")]

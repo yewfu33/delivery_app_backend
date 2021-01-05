@@ -45,6 +45,14 @@ namespace Delivery_app.Services
             try
             {
                 _context.orders.Add(order);
+
+                // subtract coupon if any
+                if (order.promo_code_id != 0)
+                {
+                    var pc = await _context.promo_codes.FindAsync(order.promo_code_id);
+                    pc.quantity -= 1;
+                }
+
                 await _context.SaveChangesAsync();
             }
             catch (Exception e)
