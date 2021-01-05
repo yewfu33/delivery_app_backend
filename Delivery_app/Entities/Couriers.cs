@@ -38,6 +38,7 @@ namespace Delivery_app.Entities
         public ICollection<Documents> documents { get; set; }
         public VehicleType vehicle_type { get; set; }
         public double commission { get; set; }
+        public double revenue { get; set; }
         public bool disable { get; set; }
         public DateTime created_at { get; set; }
         public DateTime updated_at { get; set; }

@@ -38,6 +38,7 @@ namespace Delivery_app.Entities
         public DateTime updated_at { get; set; }
         public int user_id { get; set; }
         public int courier_id { get; set; } = 0;
+        public int promo_code_id { get; set; } = 0;
         public Users user { get; }
         public ICollection<DropPoints> drop_points { get; set; }
     }

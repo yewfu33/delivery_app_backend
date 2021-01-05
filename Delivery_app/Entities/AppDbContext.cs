@@ -50,7 +50,7 @@ namespace Delivery_app.Entities
 
             modelBuilder.Entity<Couriers>()
                 .Property(_ => _.commission)
-                .HasDefaultValue(0.8);
+                .HasDefaultValue(0.5);
         }
 
         public DbSet<Users> users { get; set; }

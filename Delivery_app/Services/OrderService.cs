@@ -86,10 +86,11 @@ namespace Delivery_app.Services
             try
             {
                 List<Orders> orders = await _context.orders
-                .Where(o => o.courier_id == 0 && o.delivery_status == DeliveryStatus.Assigned)
-                .Include(o => o.drop_points)
-                .Include(o => o.user)
-                .ToListAsync();
+                    .Where(o => o.courier_id == 0 && o.delivery_status == DeliveryStatus.Assigned)
+                    .OrderByDescending(q => q.created_at)
+                    .Include(o => o.drop_points)
+                    .Include(o => o.user)
+                    .ToListAsync();
 
                 return _mapper.Map<List<Orders>, List<OrderModel>>(orders);
             }

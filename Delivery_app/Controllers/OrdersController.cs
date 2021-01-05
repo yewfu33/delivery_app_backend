@@ -220,16 +220,17 @@ namespace Delivery_app.Controllers
                 }
                 else if(promoCode.discount_type == DiscountType.Value)
                 {
-                    discount = (model.order_fee - promoCode.discount);
+                    discount = promoCode.discount;
                 }
 
                 return Ok(new { 
+                    id = promoCode.promo_code_id,
                     discount = discount
                 });
             }
             catch(Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
+                return StatusCode(StatusCodes.Status400BadRequest, new { message = e.Message });
             }
         }
 

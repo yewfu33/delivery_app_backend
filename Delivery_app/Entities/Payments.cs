@@ -8,13 +8,25 @@ namespace Delivery_app.Entities
 {
     public enum PaymentMethod : byte
     {
+        [Display(Name = "Cash")]
         Cash,
+        [Display(Name = "Prepay")]
         Prepay
+    }
+
+    public enum TransactionStatus : byte
+    {
+        [Display(Name = "Unsettle")]
+        Unsettled,
+        [Display(Name = "Received")]
+        Received
     }
 
     public enum CourierPaymentStatus : byte
     {
+        [Display(Name = "Unsettle")]
         Unsettled,
+        [Display(Name = "Paid")]
         Paid
     }
 
@@ -31,6 +43,7 @@ namespace Delivery_app.Entities
         public int courier_id { get; set; }
         public Couriers courier { get; set; }
         public PaymentMethod payment_method { get; set; } = PaymentMethod.Cash;
+        public TransactionStatus transaction_status { get; set; } = TransactionStatus.Unsettled;
         public CourierPaymentStatus courier_payment_status { get; set; } = CourierPaymentStatus.Unsettled;
         public DateTime created_at { get; set; }
     }

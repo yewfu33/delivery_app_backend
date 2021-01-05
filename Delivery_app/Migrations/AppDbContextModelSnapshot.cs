@@ -58,7 +58,7 @@ namespace Delivery_app.Migrations
                     b.Property<double>("commission")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("double")
-                        .HasDefaultValue(0.80000000000000004);
+                        .HasDefaultValue(0.5);
 
                     b.Property<DateTime>("created_at")
                         .HasColumnType("datetime(6)");
@@ -91,6 +91,9 @@ namespace Delivery_app.Migrations
 
                     b.Property<string>("profile_picture")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<double>("revenue")
+                        .HasColumnType("double");
 
                     b.Property<DateTime>("updated_at")
                         .HasColumnType("datetime(6)");
@@ -213,6 +216,9 @@ namespace Delivery_app.Migrations
                     b.Property<double>("price")
                         .HasColumnType("double");
 
+                    b.Property<int>("promo_code_id")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("updated_at")
                         .HasColumnType("datetime(6)");
 
@@ -257,6 +263,9 @@ namespace Delivery_app.Migrations
                         .HasColumnType("int");
 
                     b.Property<byte>("payment_method")
+                        .HasColumnType("tinyint unsigned");
+
+                    b.Property<byte>("transaction_status")
                         .HasColumnType("tinyint unsigned");
 
                     b.Property<int>("user_id")
@@ -377,7 +386,7 @@ namespace Delivery_app.Migrations
             modelBuilder.Entity("Delivery_app.Entities.Orders", b =>
                 {
                     b.HasOne("Delivery_app.Entities.Users", "user")
-                        .WithMany()
+                        .WithMany("orders")
                         .HasForeignKey("user_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
