@@ -43,86 +43,109 @@ namespace Delivery_app.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCourier(int id)
         {
-            Couriers courier = await _context.couriers.FindAsync(id);
-
-            if (courier == null)
+            try
             {
-                return NotFound();
-            }
+                Couriers courier = await _context.couriers.FindAsync(id);
 
-            return Ok(new {
-                id = courier.courier_id,
-                name = courier.name,
-                phone_num = courier.phone_num,
-                commission = courier.commission,
-                email = courier.email,
-                profile_pic = courier.profile_picture,
-                onBoard = courier.onBoard
-            });
+                if (courier == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(new
+                {
+                    id = courier.courier_id,
+                    name = courier.name,
+                    phone_num = courier.phone_num,
+                    commission = courier.commission,
+                    email = courier.email,
+                    profile_pic = courier.profile_picture,
+                    onBoard = courier.onBoard
+                });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
+            }
         }
 
         [HttpGet("commission/{id}")]
         public async Task<IActionResult> GetCourierCommission(int id)
         {
-            Couriers courier = await _context.couriers.FindAsync(id);
-
-            if (courier == null)
+            try
             {
-                return NotFound();
-            }
+                Couriers courier = await _context.couriers.FindAsync(id);
 
-            return Ok(courier.commission);
+                if (courier == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(courier.commission);
+            }
+            catch(Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
+            }
         }
 
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] CourierLoginModel model)
         {
-            Couriers courier = await _context.couriers.FirstOrDefaultAsync(c => c.email == model.email);
+            try
+            {
+                Couriers courier = await _context.couriers.FirstOrDefaultAsync(c => c.email == model.email);
 
-            if (courier == null)
-                return BadRequest(new { message = "Invalid email" });
+                if (courier == null)
+                    return BadRequest(new { message = "Invalid email" });
 
-            var onBoard = courier.onBoard;
+                var onBoard = courier.onBoard;
 
-            if (courier.onBoard == true) {
-                if (courier.otp == null) return BadRequest();
-                
-                if (model.password.ToUpper() != courier.otp.ToUpper())
+                if (courier.onBoard == true)
                 {
-                    return BadRequest(new { message = "Invalid password" });
+                    if (courier.otp == null) return BadRequest();
+
+                    if (model.password.ToUpper() != courier.otp.ToUpper())
+                    {
+                        return BadRequest(new { message = "Invalid password" });
+                    }
                 }
-            }
-            else
-            {
-                if (!this.Authenticate(courier, model.password)) return BadRequest(new { message = "Invalid password" });
-            }
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
+                else
                 {
+                    if (!this.Authenticate(courier, model.password)) return BadRequest(new { message = "Invalid password" });
+                }
+
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(new Claim[]
+                    {
                     new Claim(ClaimTypes.Role, "c"),
                     new Claim(ClaimTypes.Name, courier.courier_id.ToString())
-                }),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
+                    }),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                };
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                var tokenString = tokenHandler.WriteToken(token);
 
-            // return model and authentication token
-            return Ok(new
+                // return model and authentication token
+                return Ok(new
+                {
+                    id = courier.courier_id,
+                    name = courier.name,
+                    phone_num = courier.phone_num,
+                    email = courier.email,
+                    profile_pic = courier.profile_picture,
+                    token = tokenString,
+                    onBoard = onBoard
+                });
+            }
+            catch (Exception e)
             {
-                id = courier.courier_id,
-                name = courier.name,
-                phone_num = courier.phone_num,
-                email = courier.email,
-                profile_pic = courier.profile_picture,
-                token = tokenString,
-                onBoard = onBoard
-            });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
+            }
         } 
 
         [AllowAnonymous]
@@ -162,41 +185,77 @@ namespace Delivery_app.Controllers
             }
             catch(Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
             }
         }
 
         [HttpPost("change_password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordModel model)
         {
-            var c = await _context.couriers.FindAsync(model.id);
-
-            if (c == null) return NotFound(new { message = "Account no found" });
-
-            if (!c.onBoard.GetValueOrDefault())
+            try
             {
-                if (!AccountService.VerifyPasswordHash(model.oldPassword, Convert.FromBase64String(c.password), Convert.FromBase64String(c.password_salt)))
+                var c = await _context.couriers.FindAsync(model.id);
+
+                if (c == null) return NotFound(new { message = "Account no found" });
+
+                if (!c.onBoard.GetValueOrDefault())
                 {
-                    return BadRequest(new { message = "Old Password is not correct" });
+                    if (!AccountService.VerifyPasswordHash(model.oldPassword, Convert.FromBase64String(c.password), Convert.FromBase64String(c.password_salt)))
+                    {
+                        return BadRequest(new { message = "Old Password is not correct" });
+                    }
                 }
+                else
+                {
+                    // set onBoard to false after otp
+                    c.onBoard = false;
+                }
+
+                byte[] passwordHash, passwordSalt;
+
+                AccountService.CreatePasswordHash(model.password, out passwordHash, out passwordSalt);
+
+                c.password = Convert.ToBase64String(passwordHash);
+                c.password_salt = Convert.ToBase64String(passwordSalt);
+
+                _context.couriers.Update(c);
+                await _context.SaveChangesAsync();
+
+                return Ok();
             }
-            else
+            catch (Exception e)
             {
-                // set onBoard to false after otp
-                c.onBoard = false;
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
             }
+        }
 
-            byte[] passwordHash, passwordSalt;
+        [HttpGet("revenue/{id}")]
+        public async Task<IActionResult> Revenue(int id)
+        {
+            try
+            {
+                if (id == 0)
+                {
+                    return BadRequest(new { message = "Courier id is required"});
+                }
 
-            AccountService.CreatePasswordHash(model.password, out passwordHash, out passwordSalt);
+                var payments = await _context.payments
+                                .Where(p => p.courier_id == id)
+                                .OrderByDescending(p => p.created_at)
+                                .Include(p => p.order)
+                                .ToListAsync();
 
-            c.password = Convert.ToBase64String(passwordHash);
-            c.password_salt = Convert.ToBase64String(passwordSalt);
+                var sumRevenue = payments.Sum(p => p.courier_pay);
 
-            _context.couriers.Update(c);
-            await _context.SaveChangesAsync();
-
-            return Ok();
+                return Ok(new {
+                    totalEarn = sumRevenue,
+                    payments = payments
+                });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
+            }
         }
 
         private bool Authenticate(Couriers c, string password)

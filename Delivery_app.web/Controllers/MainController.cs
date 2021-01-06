@@ -74,7 +74,7 @@ namespace Delivery_app.web.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500);
+                return StatusCode(500, new { message = e.Message });
             }
         }
     }

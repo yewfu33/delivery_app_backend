@@ -209,7 +209,7 @@ namespace Delivery_app.web.Controllers
 
                 return RedirectToAction("Index");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 _toastNotification.AddErrorToastMessage($"Error occured, try again later.");
                 return RedirectToAction("Index");
