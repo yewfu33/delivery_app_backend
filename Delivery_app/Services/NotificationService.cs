@@ -45,7 +45,7 @@ namespace Delivery_app.Services
                     data = new
                     {
                         click_action = "FLUTTER_NOTIFICATION_CLICK",
-                        id = 1,
+                        id = new Random().Next(1, 1000),
                         status = "done"
                     }
                 };
