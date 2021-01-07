@@ -186,7 +186,7 @@ namespace Delivery_app.web.Controllers
                         name = c.name,
                         email = c.email,
                         total_deliver = (await _context.orders.Where(o => o.courier_id == c.courier_id).ToListAsync()).Count(),
-                        revenue = c.revenue,
+                        revenue = (await _context.payments.Where(p => p.courier_id == c.courier_id).SumAsync(p => p.courier_pay)),
                     })
                     .Select(p => p.Result)
                     .ToList();
