@@ -109,7 +109,7 @@ namespace Delivery_app.web.Controllers
                                 commission = p.courier.commission,
                                 created_on = p.created_at,
                                 order_amount = p.amount,
-                                courier_pay = p.courier_pay,
+                                courier_pay = Math.Round(p.courier_pay),
                                 payment_method = p.payment_method,
                                 courier_payment_status = p.courier_payment_status,
                             })
@@ -142,7 +142,7 @@ namespace Delivery_app.web.Controllers
                                 commission = p.courier.commission,
                                 created_on = p.created_at,
                                 order_amount = p.amount,
-                                courier_pay = p.courier_pay,
+                                courier_pay = Math.Round(p.courier_pay),
                                 payment_method = p.payment_method,
                                 courier_payment_status = p.courier_payment_status,
                             })
